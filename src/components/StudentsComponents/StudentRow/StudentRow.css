@@ -1,0 +1,52 @@
+.student-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+.student-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.student-row td {
+  text-align: left;
+}
+.student-row-item {
+  width: 150px;
+}
+.student-row-fullname,
+.student-row-study-program {
+  width: 180px;
+}
+.student-row-email {
+  width: 300px;
+  word-break: break-all;
+}
+.student-row-study-domain {
+  width: 250px;
+}
+.student-row-study-year {
+  width: 50px;
+}
+.student-row-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 50px;
+}
+.student-row-edit {
+  color: var(--light-blue);
+}
+.student-row-edit:hover {
+  color: var(--hover-blue);
+  cursor: pointer;
+}
+.student-row-delete {
+  color: var(--light-red);
+}
+.student-row-delete:hover {
+  color: var(--hover-red);
+  cursor: pointer;
+}

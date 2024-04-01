@@ -11,11 +11,11 @@ import './Navbar.css'
 function Navbar() {
   return (
     <nav className='nav'>
-      <Link to='/requests'>
+      <Link to='/'>
         <img src={logoUsv} alt='logo USV' className='nav-logo' />
       </Link>
       <ul className='nav-list'>
-        <CustomLink to='/requests'>
+        <CustomLink to='/'>
           <HiOutlineDocumentPlus />
           <p>Cereri</p>
         </CustomLink>

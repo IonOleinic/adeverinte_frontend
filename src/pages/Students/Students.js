@@ -1,11 +1,24 @@
 import React from 'react'
+import StudentsNavbar from '../../components/StudentsComponents/StudentsNavbar/StudentsNavbar'
+import ManageStudents from '../../components/StudentsComponents/ManageStudents/ManageStudents'
+import AddStudent from '../../components/StudentsComponents/AddStudent/AddStudent'
+import UploadStudents from '../../components/StudentsComponents/UploadStudents/UploadStudents'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './Students.css'
 
 function Students() {
   return (
-    <div>
-      <h1>Studenti</h1>
-    </div>
+    <>
+      <StudentsNavbar />
+      <div className='students-container'>
+        <Routes>
+          <Route path='/' element={<Navigate to='manage-students' />} />
+          <Route path='add-student' element={<AddStudent />} />
+          <Route path='manage-students' element={<ManageStudents />} />
+          <Route path='upload-students' element={<UploadStudents />} />
+        </Routes>
+      </div>
+    </>
   )
 }
 

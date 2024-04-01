@@ -12,11 +12,11 @@ function App() {
       <Navbar />
       <div className='page-container'>
         <Routes>
-          <Route path='requests' element={<Requests />} />
-          <Route path='reports' element={<Reports />} />
-          <Route path='certificates' element={<Certificates />} />
-          <Route path='students' element={<Students />} />
-          <Route path='settings' element={<Settings />} />
+          <Route path='/' element={<Requests />} />
+          <Route path='/reports' element={<Reports />} />
+          <Route path='/certificates' element={<Certificates />} />
+          <Route path='/students/*' element={<Students />} />
+          <Route path='/settings' element={<Settings />} />
         </Routes>
       </div>
       <footer></footer>

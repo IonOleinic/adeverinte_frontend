@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 4rem;
-  background-color: rgb(0, 0, 66);
+  background-color: var(--dark-blue);
   height: 100px;
 }
 .nav-list {
@@ -31,11 +31,11 @@
 }
 
 .nav-link.active {
-  color: rgb(35, 68, 255);
-  border-bottom: 2px solid rgb(35, 68, 255);
+  color: var(--active-blue);
+  border-bottom: 2px solid var(--active-blue);
 }
 .nav-link:hover {
-  color: rgb(35, 68, 255);
+  color: var(--hover-blue);
 }
 
 .nav-logo {
@@ -50,7 +50,7 @@
   font-size: 1.1rem;
   padding: 0.6rem 1rem;
   transition: all 0.2s ease-in-out;
-  background-color: rgb(73, 115, 242);
+  background-color: var(--light-blue);
   border-radius: 4px;
   border: none;
   color: white;
@@ -59,5 +59,5 @@
 .signin-btn:hover {
   cursor: pointer;
   background-color: white;
-  color: rgb(73, 115, 242);
+  color: var(--light-blue);
 }
