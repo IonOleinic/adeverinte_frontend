@@ -17,18 +17,25 @@
   margin-bottom: 2rem;
   border-radius: 6px;
   padding: 0 2rem;
+  gap: 2rem;
 }
 .manage-students-toolbar-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 .manage-students-toolbar-item input {
-  width: 250px;
+  width: 220px;
+}
+.search-students-by-study-cycle select {
+  width: 130px;
+  appearance: auto !important;
+}
+.search-students-by-study-year select {
+  width: 70px;
 }
 .manage-students-toolbar-item label {
-  /* width: 100px; */
   word-break: keep-all;
   font-weight: 500;
 }

@@ -1,0 +1,18 @@
+.btn-signin {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+}
+
+.btn-google {
+  color: white;
+  background-color: #ea4335;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.btn-google:hover {
+  color: white;
+  background-color: #cc1100;
+}

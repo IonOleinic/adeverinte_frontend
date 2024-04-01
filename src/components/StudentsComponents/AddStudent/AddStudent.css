@@ -1,0 +1,63 @@
+.add-student {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.add-student-card {
+  width: 700px;
+  margin: 0 !important;
+}
+.add-student-form {
+  display: flex;
+  flex-direction: column;
+}
+.student-email-and-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.student-email-and-name > div {
+  width: 49%;
+}
+.student-cycle-and-year {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.student-cycle-and-year > div {
+  width: 49%;
+}
+.student-finan-educform-sex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.student-finan-educform-sex > div {
+  width: 32%;
+}
+.student-card-body {
+  padding-top: 1rem !important;
+  padding-bottom: 2rem !important;
+}
+.div-btn-add-student {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.btn-add-student {
+  width: 40%;
+  min-width: 100px;
+}
+
+.add-student-invalid-feedback {
+  display: block !important;
+}
+.add-student-valid-feedback {
+  display: none !important;
+}
