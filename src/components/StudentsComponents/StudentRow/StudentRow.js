@@ -1,9 +1,11 @@
 import React from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { CiTrash } from 'react-icons/ci'
+import { useNavigate } from 'react-router-dom'
 import './StudentRow.css'
 
-function StudentRow({ student }) {
+function StudentRow({ student, deleteStudent }) {
+  const navigate = useNavigate()
   return (
     <tr className='student-row'>
       <td className='student-row-item student-row-fullname'>
@@ -24,10 +26,20 @@ function StudentRow({ student }) {
       </td>
       <td>
         <div className='student-row-item student-row-buttons'>
-          <div className='student-row-edit'>
+          <div
+            className='student-row-edit'
+            onClick={(e) => {
+              navigate(`/students/manage-students/edit-student/${student.id}`)
+            }}
+          >
             <CiEdit size={21} />
           </div>
-          <div className='student-row-delete'>
+          <div
+            className='student-row-delete'
+            onClick={() => {
+              deleteStudent(student.id)
+            }}
+          >
             <CiTrash size={21} />
           </div>
         </div>

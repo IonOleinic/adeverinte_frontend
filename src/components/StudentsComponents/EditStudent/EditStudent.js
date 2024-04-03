@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
-import { axiosPrivate } from '../../../api/api'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './AddStudent.css'
+import { useParams } from 'react-router-dom'
+import { axiosPrivate } from '../../../api/api'
 
-function AddStudent() {
+import './EditStudent.css'
+
+function EditStudent() {
   const navigate = useNavigate()
+  const { studentId } = useParams()
+
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [studyDomain, setStudyDomain] = useState('')
@@ -14,24 +19,40 @@ function AddStudent() {
   const [educationForm, setEducationForm] = useState('')
   const [financing, setFinancing] = useState('')
   const [sex, setSex] = useState('')
-  const [emailFieldErrorMessage, setEmailFieldErrorMessage] = useState('')
-  const [emailFieldErrorBool, setEmailFieldErrorBool] = useState(false)
-  const [error, setError] = useState('')
 
-  const addStudent = async (e) => {
+  const getStudent = async () => {
+    try {
+      const response = await axiosPrivate.get(`/student/${studentId}`)
+      const student = response.data
+      setEmail(student.email)
+      setFullName(student.fullName)
+      setStudyDomain(student.studyDomain)
+      setStudyProgram(student.studyProgram)
+      setStudyCycle(student.studyCycle)
+      setStudyYear(student.studyYear)
+      setEducationForm(student.educationForm)
+      setFinancing(student.financing)
+      setSex(student.sex)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getStudent()
+  }, [studentId])
+
+  const editStudent = async (e) => {
     e.preventDefault()
-    const form = document.getElementById('add-student-form')
+    const form = document.getElementById('edit-student-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
     }
     form.classList.add('was-validated')
 
     if (form.checkValidity()) {
-      if (!verifyStudentData(form)) {
-        return
-      }
       try {
-        const response = await axiosPrivate.post('/student', {
+        const response = await axiosPrivate.put(`/student/${studentId}`, {
           email,
           fullName,
           studyDomain,
@@ -42,71 +63,42 @@ function AddStudent() {
           financing,
           sex,
         })
-        console.log('Student added successfully')
       } catch (error) {
         console.log(error)
-        if (error.response.status === 409) {
-          console.log(`Email ${email} already exists`)
-          form.classList.remove('was-validated')
-          setEmailFieldErrorMessage('Exista deja un student cu acest email')
-          setEmailFieldErrorBool(true)
-        }
       }
       setTimeout(() => {
         navigate('/students')
       }, 500)
     }
   }
-  const verifyStudentData = (form) => {
-    let valid = true
-    if (email.split('@')[1] !== 'student.usv.ro') {
-      setEmailFieldErrorMessage(
-        'Email-ul trebuie sa fie de forma ' + ' @student.usv.ro'
-      )
-      form?.classList.remove('was-validated')
-      setEmailFieldErrorBool(true)
-      valid = false
-    }
-    return valid
-  }
+
   return (
     <div className='student-form-container'>
       <div className='card border-0 rounded-3 my-5 student-card'>
         <div className='card-body p-4 p-sm-5 student-card-body'>
-          <h3 className='card-title text-center mb-3  fs-3'>Adauga Student</h3>
+          <h3 className='card-title text-center mb-3  fs-3'>
+            Editeaza Student
+          </h3>
           <form
             className='student-form needs-validation'
-            id='add-student-form'
+            id='edit-student-form'
             noValidate
           >
             <div className='student-email-and-name'>
               <div className='form-floating mb-3'>
                 <input
                   type='email'
-                  className={
-                    emailFieldErrorBool
-                      ? 'form-control is-invalid'
-                      : 'form-control'
-                  }
+                  className={'form-control'}
                   id='floatingStudentEmail'
                   placeholder='nume.prenume@student.usv.ro'
                   required
+                  readOnly
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
-                    setEmailFieldErrorBool(false)
                   }}
                 />
                 <label htmlFor='floatingStudentEmail'>Email</label>
-                <div
-                  className={
-                    emailFieldErrorBool
-                      ? 'invalid-feedback student-form-invalid-feedback'
-                      : 'invalid-feedback student-form-valid-feedback'
-                  }
-                >
-                  {emailFieldErrorMessage}
-                </div>
               </div>
 
               <div className='form-floating mb-3'>
@@ -120,16 +112,6 @@ function AddStudent() {
                   onChange={(e) => setFullName(e.target.value)}
                 />
                 <label htmlFor='floatingStudentName'>Nume complet</label>
-                <div
-                  className={
-                    emailFieldErrorBool
-                      ? 'invalid-feedback student-form-invalid-feedback'
-                      : 'invalid-feedback student-form-valid-feedback'
-                  }
-                  style={{ visibility: 'hidden' }}
-                >
-                  Ceva
-                </div>
               </div>
             </div>
             <div className='form-floating mb-3'>
@@ -246,9 +228,9 @@ function AddStudent() {
               <button
                 className='btn btn-primary fw-bold btn-add-student'
                 type='submit'
-                onClick={addStudent}
+                onClick={editStudent}
               >
-                Adauga
+                Editeaza
               </button>
             </div>
           </form>
@@ -258,4 +240,4 @@ function AddStudent() {
   )
 }
 
-export default AddStudent
+export default EditStudent

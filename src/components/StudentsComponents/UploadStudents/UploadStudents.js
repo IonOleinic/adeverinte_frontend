@@ -13,7 +13,7 @@ function UploadStudents() {
         </p>
       </div>
       <div className='upload-students-controls'>
-        <div class='mb-3 upload-students-input-file'>
+        <div className='mb-3 upload-students-input-file'>
           <label htmlFor='formFile' className='form-label'>
             Alege un fisier Excel cu studenți
           </label>

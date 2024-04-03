@@ -1,7 +1,7 @@
 .students-nav {
   border-right: 3px solid var(--light-blue);
   height: 100%;
-  width: 260px;
+  width: 250px;
   padding: 2rem 0.5rem;
   padding-right: 1rem;
 }
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 .students-nav-link {

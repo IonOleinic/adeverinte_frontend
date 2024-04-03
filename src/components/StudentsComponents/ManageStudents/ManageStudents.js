@@ -1,8 +1,81 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './ManageStudents.css'
 import StudentRow from '../StudentRow/StudentRow'
+import { axiosPrivate } from '../../../api/api'
 
 function ManageStudents() {
+  const [originalStudents, setOriginalStudents] = useState([])
+  const [filteredStudents, setFilteredStudents] = useState([])
+  const [emailFilter, setEmailFilter] = useState('')
+  const [studyProgramFilter, setStudyProgramFilter] = useState('')
+  const [studyCycleFilter, setStudyCycleFilter] = useState('')
+  const [studyYearFilter, setStudyYearFilter] = useState(-1)
+
+  const getStudents = async () => {
+    try {
+      const response = await axiosPrivate.get('/students')
+      setOriginalStudents(response.data)
+      setFilteredStudents(response.data)
+      console.log(response.data)
+      clearFilters()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  useEffect(() => {
+    getStudents()
+  }, [])
+
+  const deleteStudent = async (id) => {
+    try {
+      await axiosPrivate.delete(`/student/${id}`)
+      getStudents()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const clearFilters = () => {
+    setEmailFilter('')
+    setStudyProgramFilter('')
+    setStudyCycleFilter('')
+    setStudyYearFilter(-1)
+    // setFilteredStudents(originalStudents)
+  }
+
+  const filterStudents = (
+    emailFilter,
+    studyProgramFilter,
+    studyCycleFilter,
+    studyYearFilter
+  ) => {
+    let filteredStudents = originalStudents
+    if (emailFilter) {
+      filteredStudents = filteredStudents.filter((student) =>
+        student.email?.toLowerCase()?.includes(emailFilter.toLowerCase())
+      )
+    }
+    if (studyProgramFilter) {
+      filteredStudents = filteredStudents.filter((student) =>
+        student.studyProgram
+          .toLowerCase()
+          .includes(studyProgramFilter.toLowerCase())
+      )
+    }
+    if (studyCycleFilter) {
+      filteredStudents = filteredStudents.filter(
+        (student) => student.studyCycle === studyCycleFilter
+      )
+    }
+    studyYearFilter = parseInt(studyYearFilter)
+    if (studyYearFilter !== -1) {
+      filteredStudents = filteredStudents.filter(
+        (student) => student.studyYear === studyYearFilter
+      )
+    }
+    setFilteredStudents(filteredStudents)
+  }
+
   return (
     <div className='manage-students'>
       <div className='manage-students-toolbar'>
@@ -13,6 +86,17 @@ function ManageStudents() {
             placeholder='cauta dupa email'
             id='search-by-email'
             className='form-control'
+            value={emailFilter}
+            onChange={(e) => {
+              // filterStudentByEmail(e.target.value)
+              filterStudents(
+                e.target.value,
+                studyProgramFilter,
+                studyCycleFilter,
+                studyYearFilter
+              )
+              setEmailFilter(e.target.value)
+            }}
           />
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-program'>
@@ -22,11 +106,34 @@ function ManageStudents() {
             placeholder='program de studii'
             id='search-by-study-program'
             className='form-control'
+            value={studyProgramFilter}
+            onChange={(e) => {
+              setStudyProgramFilter(e.target.value)
+              filterStudents(
+                emailFilter,
+                e.target.value,
+                studyCycleFilter,
+                studyYearFilter
+              )
+            }}
           />
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-cycle'>
           <label htmlFor='search-by-study-cycle'>Ciclu:</label>
-          <select className='form-control' id='search-by-study-cycle'>
+          <select
+            className='form-control'
+            id='search-by-study-cycle'
+            value={studyCycleFilter}
+            onChange={(e) => {
+              setStudyCycleFilter(e.target.value)
+              filterStudents(
+                emailFilter,
+                studyProgramFilter,
+                e.target.value,
+                studyYearFilter
+              )
+            }}
+          >
             <option value={''}>*</option>
             <option value={'licenta'}>licenta</option>
             <option value={'masterat'}>masterat</option>
@@ -36,8 +143,21 @@ function ManageStudents() {
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-year'>
           <label htmlFor='search-by-study-year'>An:</label>
-          <select className='form-control' id='search-by-study-year'>
-            <option value={0}>*</option>
+          <select
+            className='form-control'
+            id='search-by-study-year'
+            value={studyYearFilter}
+            onChange={(e) => {
+              setStudyYearFilter(e.target.value)
+              filterStudents(
+                emailFilter,
+                studyProgramFilter,
+                studyCycleFilter,
+                e.target.value
+              )
+            }}
+          >
+            <option value={-1}>*</option>
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
@@ -67,47 +187,13 @@ function ManageStudents() {
             </tr>
           </thead>
           <tbody>
-            <StudentRow
-              student={{
-                fullName: 'Oleinic V. Ion',
-                email: 'ion.oleinic1@student.usv.ro',
-                studyDomain:
-                  'Stiinta Calculatoarelor Stiinta Calculatoarelor Stiinta Calculatoarelor',
-                studyProgram: 'Stiinta si Ingineria Calculatoarelor',
-                studyCycle: 'masterat',
-                studyYear: '1',
-              }}
-            />
-            <StudentRow
-              student={{
-                fullName: 'Oleinic V. Ion',
-                email: 'ion.oleinic1@student.usv.ro',
-                studyDomain: 'Stiinta Calculatoarelor',
-                studyProgram: 'Stiinta si Ingineria Calculatoarelor',
-                studyCycle: 'masterat',
-                studyYear: '1',
-              }}
-            />
-            <StudentRow
-              student={{
-                fullName: 'Oleinic V. Ion',
-                email: 'ion.oleinic1@student.usv.ro',
-                studyDomain: 'Stiinta Calculatoarelor',
-                studyProgram: 'Stiinta si Ingineria Calculatoarelor',
-                studyCycle: 'masterat',
-                studyYear: '1',
-              }}
-            />
-            <StudentRow
-              student={{
-                fullName: 'Beleniuc V. Vitalie',
-                email: 'vitalie.beleniuc1@student.usv.ro',
-                studyDomain: 'Stiinta Calculatoarelor',
-                studyProgram: 'Stiinta si Ingineria Calculatoarelor',
-                studyCycle: 'masterat',
-                studyYear: '1',
-              }}
-            />
+            {filteredStudents.map((student) => (
+              <StudentRow
+                key={student.id}
+                student={student}
+                deleteStudent={deleteStudent}
+              />
+            ))}
           </tbody>
         </table>
       </div>

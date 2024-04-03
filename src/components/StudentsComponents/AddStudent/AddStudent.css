@@ -1,14 +1,14 @@
-.add-student {
+.student-form-container {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
 }
-.add-student-card {
-  width: 700px;
+.student-card {
+  width: 720px;
   margin: 0 !important;
 }
-.add-student-form {
+.student-form {
   display: flex;
   flex-direction: column;
 }
@@ -55,9 +55,9 @@
   min-width: 100px;
 }
 
-.add-student-invalid-feedback {
+.student-form-invalid-feedback {
   display: block !important;
 }
-.add-student-valid-feedback {
+.student-form-valid-feedback {
   display: none !important;
 }
