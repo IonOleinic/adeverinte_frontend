@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { axiosPrivate } from '../../../api/api'
 import { useNavigate } from 'react-router-dom'
 import './AddStudent.css'
@@ -16,7 +16,7 @@ function AddStudent() {
   const [sex, setSex] = useState('')
   const [emailFieldErrorMessage, setEmailFieldErrorMessage] = useState('')
   const [emailFieldErrorBool, setEmailFieldErrorBool] = useState(false)
-  const [error, setError] = useState('')
+  const [disabledAddBtn, setDisabledAddBtn] = useState(true)
 
   const addStudent = async (e) => {
     e.preventDefault()
@@ -31,7 +31,7 @@ function AddStudent() {
         return
       }
       try {
-        const response = await axiosPrivate.post('/student', {
+        await axiosPrivate.post('/student', {
           email,
           fullName,
           studyDomain,
@@ -42,19 +42,18 @@ function AddStudent() {
           financing,
           sex,
         })
-        console.log('Student added successfully')
+        setDisabledAddBtn(true)
+        setTimeout(() => {
+          navigate('/students')
+        }, 500)
       } catch (error) {
         console.log(error)
         if (error.response.status === 409) {
-          console.log(`Email ${email} already exists`)
           form.classList.remove('was-validated')
           setEmailFieldErrorMessage('Exista deja un student cu acest email')
           setEmailFieldErrorBool(true)
         }
       }
-      setTimeout(() => {
-        navigate('/students')
-      }, 500)
     }
   }
   const verifyStudentData = (form) => {
@@ -69,6 +68,20 @@ function AddStudent() {
     }
     return valid
   }
+
+  useEffect(() => {
+    //
+  }, [
+    email,
+    fullName,
+    studyDomain,
+    studyProgram,
+    studyCycle,
+    studyYear,
+    educationForm,
+    financing,
+  ])
+
   return (
     <div className='student-form-container'>
       <div className='card border-0 rounded-3 my-5 student-card'>
@@ -95,6 +108,7 @@ function AddStudent() {
                   onChange={(e) => {
                     setEmail(e.target.value)
                     setEmailFieldErrorBool(false)
+                    setDisabledAddBtn(false)
                   }}
                 />
                 <label htmlFor='floatingStudentEmail'>Email</label>
@@ -117,7 +131,10 @@ function AddStudent() {
                   placeholder='Nume inițiala-tată prenume'
                   required
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value)
+                    setDisabledAddBtn(false)
+                  }}
                 />
                 <label htmlFor='floatingStudentName'>Nume complet</label>
                 <div
@@ -140,7 +157,10 @@ function AddStudent() {
                 placeholder='Domeniu de studii'
                 required
                 value={studyDomain}
-                onChange={(e) => setStudyDomain(e.target.value)}
+                onChange={(e) => {
+                  setStudyDomain(e.target.value)
+                  setDisabledAddBtn(false)
+                }}
               />
               <label htmlFor='floatingStudentDomain'>Domeniu de studii</label>
             </div>
@@ -152,7 +172,10 @@ function AddStudent() {
                 placeholder='Program de studii'
                 required
                 value={studyProgram}
-                onChange={(e) => setStudyProgram(e.target.value)}
+                onChange={(e) => {
+                  setStudyProgram(e.target.value)
+                  setDisabledAddBtn(false)
+                }}
               />
               <label htmlFor='floatingStudentProgram'>Program de studii</label>
             </div>
@@ -164,7 +187,10 @@ function AddStudent() {
                   aria-label='Ciclu de studii'
                   required
                   value={studyCycle}
-                  onChange={(e) => setStudyCycle(e.target.value)}
+                  onChange={(e) => {
+                    setStudyCycle(e.target.value)
+                    setDisabledAddBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='licenta'>Licenta</option>
@@ -181,7 +207,10 @@ function AddStudent() {
                   aria-label='An studiu'
                   required
                   value={studyYear}
-                  onChange={(e) => setStudyYear(parseInt(e.target.value))}
+                  onChange={(e) => {
+                    setStudyYear(parseInt(e.target.value))
+                    setDisabledAddBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value={1}>1</option>
@@ -200,7 +229,10 @@ function AddStudent() {
                   aria-label='Formă de învățămant'
                   required
                   value={educationForm}
-                  onChange={(e) => setEducationForm(e.target.value)}
+                  onChange={(e) => {
+                    setEducationForm(e.target.value)
+                    setDisabledAddBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='IF'>IF</option>
@@ -217,7 +249,10 @@ function AddStudent() {
                   aria-label='Finanțare'
                   required
                   value={financing}
-                  onChange={(e) => setFinancing(e.target.value)}
+                  onChange={(e) => {
+                    setFinancing(e.target.value)
+                    setDisabledAddBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='buget'>Buget</option>
@@ -232,7 +267,10 @@ function AddStudent() {
                   aria-label='Sex'
                   required
                   value={sex}
-                  onChange={(e) => setSex(e.target.value)}
+                  onChange={(e) => {
+                    setSex(e.target.value)
+                    setDisabledAddBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='M'>M</option>
@@ -244,6 +282,7 @@ function AddStudent() {
             <hr className='my-4' />
             <div className='d-grid div-btn-add-student'>
               <button
+                disabled={disabledAddBtn}
                 className='btn btn-primary fw-bold btn-add-student'
                 type='submit'
                 onClick={addStudent}

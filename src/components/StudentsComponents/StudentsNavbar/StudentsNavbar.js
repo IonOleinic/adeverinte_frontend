@@ -1,7 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { IoPersonAddOutline } from 'react-icons/io5'
-import { LiaUserEditSolid } from 'react-icons/lia'
+// import { LiaUserEditSolid } from 'react-icons/lia'
+import { GrGroup } from 'react-icons/gr'
 import { LiaFileUploadSolid } from 'react-icons/lia'
 import './StudentsNavbar.css'
 
@@ -10,11 +11,11 @@ function StudentsNavbar() {
     <div className='students-nav'>
       <ul className='students-nav-list'>
         <CustomLink to='/students/manage-students'>
-          <LiaUserEditSolid size={24} />
+          <GrGroup size={21} />
           <p>Gestiune studenti</p>
         </CustomLink>
         <CustomLink to='/students/add-student'>
-          <IoPersonAddOutline size={22} />
+          <IoPersonAddOutline size={21} />
           <p>Adauga student</p>
         </CustomLink>
         <CustomLink to='/students/upload-students'>

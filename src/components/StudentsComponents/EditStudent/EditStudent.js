@@ -19,6 +19,7 @@ function EditStudent() {
   const [educationForm, setEducationForm] = useState('')
   const [financing, setFinancing] = useState('')
   const [sex, setSex] = useState('')
+  const [disabledEditBtn, setDisabledEditBtn] = useState(true)
 
   const getStudent = async () => {
     try {
@@ -42,6 +43,20 @@ function EditStudent() {
     getStudent()
   }, [studentId])
 
+  useEffect(() => {
+    setDisabledEditBtn(false)
+  }, [
+    email,
+    fullName,
+    studyDomain,
+    studyProgram,
+    studyCycle,
+    studyYear,
+    financing,
+    sex,
+    educationForm,
+  ])
+
   const editStudent = async (e) => {
     e.preventDefault()
     const form = document.getElementById('edit-student-form')
@@ -52,7 +67,7 @@ function EditStudent() {
 
     if (form.checkValidity()) {
       try {
-        const response = await axiosPrivate.put(`/student/${studentId}`, {
+        await axiosPrivate.put(`/student/${studentId}`, {
           email,
           fullName,
           studyDomain,
@@ -63,12 +78,13 @@ function EditStudent() {
           financing,
           sex,
         })
+        setDisabledEditBtn(true)
+        setTimeout(() => {
+          navigate('/students')
+        }, 500)
       } catch (error) {
         console.log(error)
       }
-      setTimeout(() => {
-        navigate('/students')
-      }, 500)
     }
   }
 
@@ -96,6 +112,7 @@ function EditStudent() {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
+                    setDisabledEditBtn(false)
                   }}
                 />
                 <label htmlFor='floatingStudentEmail'>Email</label>
@@ -122,7 +139,10 @@ function EditStudent() {
                 placeholder='Domeniu de studii'
                 required
                 value={studyDomain}
-                onChange={(e) => setStudyDomain(e.target.value)}
+                onChange={(e) => {
+                  setStudyDomain(e.target.value)
+                  setDisabledEditBtn(false)
+                }}
               />
               <label htmlFor='floatingStudentDomain'>Domeniu de studii</label>
             </div>
@@ -134,7 +154,10 @@ function EditStudent() {
                 placeholder='Program de studii'
                 required
                 value={studyProgram}
-                onChange={(e) => setStudyProgram(e.target.value)}
+                onChange={(e) => {
+                  setStudyProgram(e.target.value)
+                  setDisabledEditBtn(false)
+                }}
               />
               <label htmlFor='floatingStudentProgram'>Program de studii</label>
             </div>
@@ -146,7 +169,10 @@ function EditStudent() {
                   aria-label='Ciclu de studii'
                   required
                   value={studyCycle}
-                  onChange={(e) => setStudyCycle(e.target.value)}
+                  onChange={(e) => {
+                    setStudyCycle(e.target.value)
+                    setDisabledEditBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='licenta'>Licenta</option>
@@ -163,7 +189,10 @@ function EditStudent() {
                   aria-label='An studiu'
                   required
                   value={studyYear}
-                  onChange={(e) => setStudyYear(parseInt(e.target.value))}
+                  onChange={(e) => {
+                    setStudyYear(parseInt(e.target.value))
+                    setDisabledEditBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value={1}>1</option>
@@ -182,7 +211,10 @@ function EditStudent() {
                   aria-label='Formă de învățămant'
                   required
                   value={educationForm}
-                  onChange={(e) => setEducationForm(e.target.value)}
+                  onChange={(e) => {
+                    setEducationForm(e.target.value)
+                    setDisabledEditBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='IF'>IF</option>
@@ -199,7 +231,10 @@ function EditStudent() {
                   aria-label='Finanțare'
                   required
                   value={financing}
-                  onChange={(e) => setFinancing(e.target.value)}
+                  onChange={(e) => {
+                    setFinancing(e.target.value)
+                    setDisabledEditBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='buget'>Buget</option>
@@ -214,7 +249,10 @@ function EditStudent() {
                   aria-label='Sex'
                   required
                   value={sex}
-                  onChange={(e) => setSex(e.target.value)}
+                  onChange={(e) => {
+                    setSex(e.target.value)
+                    setDisabledEditBtn(false)
+                  }}
                 >
                   <option value={''}>Selecteaza...</option>
                   <option value='M'>M</option>
@@ -228,6 +266,7 @@ function EditStudent() {
               <button
                 className='btn btn-primary fw-bold btn-add-student'
                 type='submit'
+                disabled={disabledEditBtn}
                 onClick={editStudent}
               >
                 Editeaza

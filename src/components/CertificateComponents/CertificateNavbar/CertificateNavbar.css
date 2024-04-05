@@ -1,4 +1,4 @@
-.students-nav {
+.certificates-nav {
   border-right: 3px solid var(--light-blue);
   height: 100%;
   width: 250px;
@@ -6,7 +6,7 @@
   padding-right: 0.8rem;
 }
 
-.students-nav-list {
+.certificates-nav-list {
   list-style-type: none;
   display: flex;
   align-items: center;
@@ -16,7 +16,7 @@
   height: 100%;
 }
 
-.students-nav-item {
+.certificates-nav-item {
   width: 100%;
   text-decoration: none;
   color: inherit;
@@ -27,14 +27,14 @@
   font-size: 1.2rem;
 }
 
-.students-nav-link {
+.certificates-nav-link {
   text-decoration: none;
   width: 100%;
   color: black;
   border: 1px solid var(--light-grey);
   border-radius: 5px;
 }
-.students-nav-link.active {
+.certificates-nav-link.active {
   color: white;
   background-color: var(--active-blue);
 }

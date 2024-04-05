@@ -135,10 +135,10 @@ function ManageStudents() {
             }}
           >
             <option value={''}>*</option>
-            <option value={'licenta'}>licenta</option>
-            <option value={'masterat'}>masterat</option>
-            <option value={'studii postuniversitare'}>postuniv.</option>
-            <option value={'conversie profesionala'}>conv. prof.</option>
+            <option value={'licenta'}>Licenta</option>
+            <option value={'masterat'}>Masterat</option>
+            <option value={'studii postuniversitare'}>Postuniv.</option>
+            <option value={'conversie profesionala'}>Conv. prof.</option>
           </select>
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-year'>

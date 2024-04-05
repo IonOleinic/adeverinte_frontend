@@ -1,0 +1,68 @@
+.manage-certificates {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.manage-certificates-toolbar {
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid var(--light-grey);
+  margin-bottom: 2rem;
+  border-radius: 6px;
+  padding: 0 2rem;
+  gap: 2rem;
+}
+.manage-certificates-toolbar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.manage-certificates-toolbar-item select {
+  appearance: auto !important;
+}
+.manage-certificates-toolbar-item input {
+  width: 220px;
+}
+.search-certificates-by-purpose select {
+  width: 130px;
+}
+.search-certificates-by-printed select {
+  width: 70px;
+}
+.manage-certificates-toolbar-item label {
+  word-break: keep-all;
+  font-weight: 500;
+}
+.manage-certificates-list {
+  display: flex;
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.manage-certificates-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Required for sticky thead */
+}
+.manage-certificates-table thead {
+  position: sticky;
+  top: 0; /* Stick the thead to the top */
+  z-index: 1; /* Ensure thead is above tbody */
+}
+
+.manage-certificates-table th {
+  text-align: left;
+}
+
+.certificate-row-header {
+  background-color: white !important;
+}

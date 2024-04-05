@@ -1,0 +1,72 @@
+.certificate-options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
+  height: 100%;
+  padding: 2rem;
+}
+.certificate-options-info {
+  max-width: 800px;
+  border: 1px solid var(--light-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.certificate-options-info-icon {
+  color: var(--light-blue);
+}
+
+.certificate-options-info > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.certificate-options-info p {
+  font-size: 1.1rem;
+  width: 100%;
+  text-align: left;
+}
+
+.certificate-options-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 400px;
+}
+.certificate-options-card {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.certificate-options-card-body {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.div-btn-save-certificate-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.btn-save-certificate-options {
+  width: 40%;
+  min-width: 200px;
+}
+
+.certificate-options-form-invalid-feedback {
+  display: block !important;
+}
+.certificate-options-form-valid-feedback {
+  display: none !important;
+}

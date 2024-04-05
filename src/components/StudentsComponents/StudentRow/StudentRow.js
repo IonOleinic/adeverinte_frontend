@@ -32,7 +32,7 @@ function StudentRow({ student, deleteStudent }) {
               navigate(`/students/manage-students/edit-student/${student.id}`)
             }}
           >
-            <CiEdit size={21} />
+            <CiEdit size={23} />
           </div>
           <div
             className='student-row-delete'
@@ -40,7 +40,7 @@ function StudentRow({ student, deleteStudent }) {
               deleteStudent(student.id)
             }}
           >
-            <CiTrash size={21} />
+            <CiTrash size={23} />
           </div>
         </div>
       </td>

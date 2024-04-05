@@ -14,12 +14,12 @@ function Students() {
       <div className='students-container'>
         <Routes>
           <Route path='/' element={<Navigate to='manage-students' />} />
-          <Route path='add-student' element={<AddStudent />} />
           <Route path='manage-students' element={<ManageStudents />} />
           <Route
             path='manage-students/edit-student/:studentId'
             element={<EditStudent />}
           />
+          <Route path='add-student' element={<AddStudent />} />
           <Route path='upload-students' element={<UploadStudents />} />
         </Routes>
       </div>

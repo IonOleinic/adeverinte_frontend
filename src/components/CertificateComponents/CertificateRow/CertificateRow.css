@@ -1,0 +1,62 @@
+.certificate-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.5rem;
+}
+.certificate-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.certificate-row td {
+  text-align: left;
+}
+.certificate-row-item {
+  width: 150px;
+}
+.certificate-row-registration-nr {
+  width: 200px;
+}
+.certificate-row-fullname {
+  width: 200px;
+}
+.certificate-row-email {
+  width: 300px;
+  word-break: break-all;
+}
+.certificate-row-purpose {
+  width: 200px;
+}
+.certificate-row-printed {
+  width: 100px;
+}
+.certificate-row-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  width: 50px;
+}
+.certificate-row-edit {
+  color: var(--very-light-blue);
+}
+.certificate-row-edit:hover {
+  color: var(--hover-blue);
+  cursor: pointer;
+}
+.certificate-row-delete {
+  color: var(--very-light-red);
+}
+.certificate-row-delete:hover {
+  color: var(--hover-red);
+  cursor: pointer;
+}
+.certificate-row-print {
+  color: rgb(106, 106, 106);
+}
+.certificate-row-print:hover {
+  color: black;
+  cursor: pointer;
+}

@@ -1,11 +1,11 @@
 import React from 'react'
 import logoUsv from './images/usv-sigla.png'
 import { NavLink, Link } from 'react-router-dom'
-import { HiOutlineDocumentPlus } from 'react-icons/hi2'
 import { HiOutlineDocumentChartBar } from 'react-icons/hi2'
-import { HiOutlineClipboardDocumentCheck } from 'react-icons/hi2'
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2'
 import { PiStudent } from 'react-icons/pi'
 import { IoSettingsOutline } from 'react-icons/io5'
+import { HiOutlineDocumentText } from 'react-icons/hi2'
 import './Navbar.css'
 
 function Navbar() {
@@ -16,11 +16,11 @@ function Navbar() {
       </Link>
       <ul className='nav-list'>
         <CustomLink to='/'>
-          <HiOutlineDocumentPlus />
+          <HiOutlineDocumentText />
           <p>Cereri</p>
         </CustomLink>
         <CustomLink to='/certificates'>
-          <HiOutlineClipboardDocumentCheck />
+          <HiOutlineClipboardDocumentList />
           <p>Adeverințe</p>
         </CustomLink>
         <CustomLink to='/students'>
