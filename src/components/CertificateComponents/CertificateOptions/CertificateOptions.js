@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import { axiosPrivate } from '../../../api/api'
+import { toast } from 'react-toastify'
 import './CertificateOptions.css'
 
 function CertificateOptions() {
@@ -30,8 +31,9 @@ function CertificateOptions() {
   }
 
   const saveOptions = async (e) => {
+    toast.dismiss()
+    setDisabledSaveBtn(true)
     e.preventDefault()
-
     const form = document.getElementById('certificate-options-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
@@ -44,18 +46,30 @@ function CertificateOptions() {
           NR,
           mask,
         })
-        setDisabledSaveBtn(true)
+        toast.success('Optiunile au fost salvate cu succes.', {
+          theme: 'colored',
+          autoClose: false,
+        })
       } catch (error) {
         console.log(error)
-        form.classList.remove('was-validated')
-        setinvalidMaskBool(true)
-        setinvalidMaskMessage('Masca introdusa nu este valida')
+        if (error.response.status === 400) {
+          form.classList.remove('was-validated')
+          setinvalidMaskBool(true)
+          setinvalidMaskMessage('Masca introdusa nu este valida')
+          toast.error('Eroare. Masca introdusa nu este valida.', {
+            theme: 'colored',
+            autoClose: false,
+          })
+        }
       }
     }
   }
   useEffect(() => {
     getLastUsedMask()
     getCertificateOptions()
+    return () => {
+      toast.dismiss()
+    }
   }, [])
 
   return (
@@ -100,6 +114,7 @@ function CertificateOptions() {
                     setNR(e.target.value)
                     setDisabledSaveBtn(false)
                     setinvalidMaskBool(false)
+                    toast.dismiss()
                   }}
                 />
                 <label htmlFor='floatingCertificateNumber'>NR</label>
@@ -119,6 +134,7 @@ function CertificateOptions() {
                     setMask(e.target.value)
                     setDisabledSaveBtn(false)
                     setinvalidMaskBool(false)
+                    toast.dismiss()
                   }}
                 />
                 <label htmlFor='floatingCertificateMask'>Masca</label>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { axiosPrivate } from '../../../api/api'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import './AddStudent.css'
 
 function AddStudent() {
@@ -20,14 +21,19 @@ function AddStudent() {
 
   const addStudent = async (e) => {
     e.preventDefault()
+    setDisabledAddBtn(true)
     const form = document.getElementById('add-student-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
     }
     form.classList.add('was-validated')
-
     if (form.checkValidity()) {
-      if (!verifyStudentData(form)) {
+      if (!verifyStudentData()) {
+        form.classList.remove('was-validated')
         return
       }
       try {
@@ -42,7 +48,7 @@ function AddStudent() {
           financing,
           sex,
         })
-        setDisabledAddBtn(true)
+        toast.success(`A fost adaugat studentul ${fullName}`)
         setTimeout(() => {
           navigate('/students')
         }, 500)
@@ -62,7 +68,6 @@ function AddStudent() {
       setEmailFieldErrorMessage(
         'Email-ul trebuie sa fie de forma ' + ' @student.usv.ro'
       )
-      form?.classList.remove('was-validated')
       setEmailFieldErrorBool(true)
       valid = false
     }
@@ -70,7 +75,7 @@ function AddStudent() {
   }
 
   useEffect(() => {
-    //
+    toast.dismiss()
   }, [
     email,
     fullName,
@@ -81,6 +86,23 @@ function AddStudent() {
     educationForm,
     financing,
   ])
+
+  useEffect(() => {
+    return () => {
+      setTimeout(() => {
+        toast.dismiss()
+      }, 2000)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (emailFieldErrorBool) {
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
+    }
+  }, [emailFieldErrorBool])
 
   return (
     <div className='student-form-container'>

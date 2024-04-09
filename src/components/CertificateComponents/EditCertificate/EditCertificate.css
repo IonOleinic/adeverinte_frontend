@@ -1,0 +1,17 @@
+.edit-certificate-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  width: 400px;
+}
+.div-btn-edit-certificate {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.div-btn-edit-certificate button {
+  width: 120px;
+}

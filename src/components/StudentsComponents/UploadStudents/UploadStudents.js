@@ -24,7 +24,10 @@ function UploadStudents() {
           />
         </div>
         <div className='div-btn-upload-students'>
-          <button type='button' className='btn btn-primary btn-upload-students'>
+          <button
+            type='button'
+            className='btn btn-primary fw-bold btn-upload-students'
+          >
             Încarcă fișierul
           </button>
         </div>

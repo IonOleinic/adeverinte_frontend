@@ -28,14 +28,14 @@
   width: 220px;
 }
 .student-row-study-year {
-  width: 30px;
+  width: 50px;
 }
 .student-row-buttons {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 1rem;
-  width: 60px;
+  gap: 1.2rem;
+  width: 70px;
 }
 .student-row-edit {
   color: var(--very-light-blue);

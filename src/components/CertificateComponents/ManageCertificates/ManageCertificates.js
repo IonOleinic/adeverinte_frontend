@@ -1,30 +1,51 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import CertificateRow from '../CertificateRow/CertificateRow'
 import { axiosPrivate } from '../../../api/api'
+import { toast } from 'react-toastify'
 import './ManageCertificates.css'
 
 function ManageCertificates() {
-  const [originalCertificates, setOriginalCertificates] = useState([])
-  const [filteredCertificated, setFilteredCertificates] = useState([])
-  const [registrationNrFilter, setRegistrationNrFilter] = useState('')
-  const [studentEmailFilter, setStudentEmailFilter] = useState('')
-  const [printedFilter, setPrintedFilter] = useState(undefined)
+  const [certificates, setCertificates] = useState([])
+  const [filters, setFilters] = useState({
+    registrationNr: '',
+    studentEmail: '',
+    printed: '',
+  })
 
   const getCertificates = async () => {
     try {
       const response = await axiosPrivate.get('/certificates')
-      setOriginalCertificates(response.data)
-      setFilteredCertificates(response.data)
+      setCertificates(response.data)
       console.log(response.data)
     } catch (error) {
       console.log(error)
     }
   }
+
+  const filteredCertificates = useMemo(() => {
+    return certificates.filter((certificate) => {
+      return (
+        certificate.registrationNr
+          .toLowerCase()
+          .includes(filters.registrationNr.toLowerCase()) &&
+        certificate.studentEmail
+          .toLowerCase()
+          .includes(filters.studentEmail.toLowerCase()) &&
+        (filters.printed // Check if printed filter is defined
+          ? certificate.printed
+            ? filters.printed === 'true'
+            : filters.printed === 'false'
+          : true) // If printed filter is not defined, include all records
+      )
+    })
+  }, [certificates, filters])
+
   const deleteCertificate = async (registrationNr) => {
     try {
       await axiosPrivate.delete(
         `/certificate/${encodeURIComponent(registrationNr)}`
       )
+      toast.warning(`Adeverința ${registrationNr} a fost ștearsă.`)
       getCertificates()
     } catch (error) {
       console.log(error)
@@ -35,33 +56,13 @@ function ManageCertificates() {
     getCertificates()
   }, [])
 
-  const filterCertificates = (
-    registrationNrFilter,
-    studentEmailFilter,
-    printedFilter
-  ) => {
-    let filteredCertificates = originalCertificates
-    if (registrationNrFilter) {
-      filteredCertificates = filteredCertificates.filter((certificate) =>
-        certificate.registrationNr.includes(registrationNrFilter)
-      )
-    }
-    if (studentEmailFilter) {
-      filteredCertificates = filteredCertificates.filter((certificate) =>
-        certificate.studentEmail.includes(studentEmailFilter)
-      )
-    }
-    if (printedFilter) {
-      filteredCertificates = filteredCertificates.filter((certificate) => {
-        if (printedFilter == 'true') {
-          if (certificate.printed) return true
-        } else if (printedFilter == 'false') {
-          if (!certificate.printed) return true
-        }
-      })
-    }
-    setFilteredCertificates(filteredCertificates)
+  const handleFilterChange = (filter, value) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filter]: value,
+    }))
   }
+
   return (
     <div className='manage-certificates'>
       <div className='manage-certificates-toolbar'>
@@ -72,14 +73,9 @@ function ManageCertificates() {
             placeholder='nr înregistrare'
             id='search-by-registration-nr'
             className='form-control'
-            value={registrationNrFilter}
+            value={filters.registrationNr}
             onChange={(e) => {
-              filterCertificates(
-                e.target.value,
-                studentEmailFilter,
-                printedFilter
-              )
-              setRegistrationNrFilter(e.target.value)
+              handleFilterChange('registrationNr', e.target.value)
             }}
           />
         </div>
@@ -90,30 +86,20 @@ function ManageCertificates() {
             placeholder='cauta dupa email'
             id='search-by-email'
             className='form-control'
-            value={studentEmailFilter}
+            value={filters.studentEmail}
             onChange={(e) => {
-              filterCertificates(
-                registrationNrFilter,
-                e.target.value,
-                printedFilter
-              )
-              setStudentEmailFilter(e.target.value)
+              handleFilterChange('studentEmail', e.target.value)
             }}
           />
         </div>
         <div className='manage-certificates-toolbar-item search-students-by-printed'>
-          <label htmlFor='search-by-printed'>Printat:</label>
+          <label htmlFor='search-by-printed'>Printată:</label>
           <select
             className='form-control'
             id='search-by-printed'
-            value={printedFilter}
+            value={filters.printed}
             onChange={(e) => {
-              filterCertificates(
-                registrationNrFilter,
-                studentEmailFilter,
-                e.target.value
-              )
-              setPrintedFilter(e.target.value)
+              handleFilterChange('printed', e.target.value)
             }}
           >
             <option value={''}>*</option>
@@ -139,13 +125,13 @@ function ManageCertificates() {
                 Scopul adeverinței
               </th>
               <th className='certificate-row-item certificate-row-printed'>
-                Printat
+                Printată
               </th>
               <th className='certificate-row-item certificate-row-buttons'></th>
             </tr>
           </thead>
           <tbody>
-            {filteredCertificated.map((certificate) => (
+            {filteredCertificates.map((certificate) => (
               <CertificateRow
                 key={certificate.registrationNr}
                 certificate={certificate}

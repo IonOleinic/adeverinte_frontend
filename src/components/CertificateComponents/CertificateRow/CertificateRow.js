@@ -2,9 +2,11 @@ import React from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { CiTrash } from 'react-icons/ci'
 import { IoPrintOutline } from 'react-icons/io5'
+import { useNavigate } from 'react-router-dom'
 import './CertificateRow.css'
 
 function CertificateRow({ certificate, deleteCertificate }) {
+  const navigate = useNavigate()
   return (
     <tr className='certificate-row'>
       <td className='certificate-row-item certificate-row-registration-nr'>
@@ -35,7 +37,11 @@ function CertificateRow({ certificate, deleteCertificate }) {
           <div
             className='certificate-row-edit'
             onClick={(e) => {
-              // navigate(`/students/manage-students/edit-student/${student.id}`)
+              navigate(
+                `/certificates/manage-certificates/edit-certificate/${encodeURIComponent(
+                  certificate.registrationNr
+                )}`
+              )
             }}
           >
             <CiEdit size={23} />

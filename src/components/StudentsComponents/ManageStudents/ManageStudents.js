@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import './ManageStudents.css'
 import StudentRow from '../StudentRow/StudentRow'
 import { axiosPrivate } from '../../../api/api'
+import { toast } from 'react-toastify'
 
 function ManageStudents() {
-  const [originalStudents, setOriginalStudents] = useState([])
-  const [filteredStudents, setFilteredStudents] = useState([])
-  const [emailFilter, setEmailFilter] = useState('')
-  const [studyProgramFilter, setStudyProgramFilter] = useState('')
-  const [studyCycleFilter, setStudyCycleFilter] = useState('')
-  const [studyYearFilter, setStudyYearFilter] = useState(-1)
+  const [students, setStudents] = useState([])
+  const [filters, setFilters] = useState({
+    email: '',
+    studyProgram: '',
+    studyCycle: '',
+    studyYear: '',
+  })
 
   const getStudents = async () => {
     try {
       const response = await axiosPrivate.get('/students')
-      setOriginalStudents(response.data)
-      setFilteredStudents(response.data)
+      setStudents(response.data)
       console.log(response.data)
-      clearFilters()
     } catch (error) {
       console.error(error)
     }
@@ -28,52 +28,37 @@ function ManageStudents() {
 
   const deleteStudent = async (id) => {
     try {
+      const response = await axiosPrivate.get(`/student/${id}`)
       await axiosPrivate.delete(`/student/${id}`)
+      toast.warning(`Studentul ${response.data?.fullName} a fost șters.`)
       getStudents()
     } catch (error) {
       console.error(error)
     }
   }
 
-  const clearFilters = () => {
-    setEmailFilter('')
-    setStudyProgramFilter('')
-    setStudyCycleFilter('')
-    setStudyYearFilter(-1)
-    // setFilteredStudents(originalStudents)
-  }
-
-  const filterStudents = (
-    emailFilter,
-    studyProgramFilter,
-    studyCycleFilter,
-    studyYearFilter
-  ) => {
-    let filteredStudents = originalStudents
-    if (emailFilter) {
-      filteredStudents = filteredStudents.filter((student) =>
-        student.email?.toLowerCase()?.includes(emailFilter.toLowerCase())
-      )
-    }
-    if (studyProgramFilter) {
-      filteredStudents = filteredStudents.filter((student) =>
+  const filteredStudents = useMemo(() => {
+    return students.filter((student) => {
+      return (
+        student.email.toLowerCase().includes(filters.email.toLowerCase()) &&
         student.studyProgram
           .toLowerCase()
-          .includes(studyProgramFilter.toLowerCase())
+          .includes(filters.studyProgram.toLowerCase()) &&
+        (filters.studyCycle
+          ? student.studyCycle === filters.studyCycle
+          : true) &&
+        (filters.studyYear
+          ? student.studyYear === parseInt(filters.studyYear)
+          : true)
       )
-    }
-    if (studyCycleFilter) {
-      filteredStudents = filteredStudents.filter(
-        (student) => student.studyCycle === studyCycleFilter
-      )
-    }
-    studyYearFilter = parseInt(studyYearFilter)
-    if (studyYearFilter !== -1) {
-      filteredStudents = filteredStudents.filter(
-        (student) => student.studyYear === studyYearFilter
-      )
-    }
-    setFilteredStudents(filteredStudents)
+    })
+  }, [students, filters])
+
+  const handleFilterChange = (filter, value) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filter]: value,
+    }))
   }
 
   return (
@@ -86,17 +71,8 @@ function ManageStudents() {
             placeholder='cauta dupa email'
             id='search-by-email'
             className='form-control'
-            value={emailFilter}
-            onChange={(e) => {
-              // filterStudentByEmail(e.target.value)
-              filterStudents(
-                e.target.value,
-                studyProgramFilter,
-                studyCycleFilter,
-                studyYearFilter
-              )
-              setEmailFilter(e.target.value)
-            }}
+            value={filters.email}
+            onChange={(e) => handleFilterChange('email', e.target.value)}
           />
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-program'>
@@ -106,16 +82,8 @@ function ManageStudents() {
             placeholder='program de studii'
             id='search-by-study-program'
             className='form-control'
-            value={studyProgramFilter}
-            onChange={(e) => {
-              setStudyProgramFilter(e.target.value)
-              filterStudents(
-                emailFilter,
-                e.target.value,
-                studyCycleFilter,
-                studyYearFilter
-              )
-            }}
+            value={filters.studyProgram}
+            onChange={(e) => handleFilterChange('studyProgram', e.target.value)}
           />
         </div>
         <div className='manage-students-toolbar-item search-students-by-study-cycle'>
@@ -123,16 +91,8 @@ function ManageStudents() {
           <select
             className='form-control'
             id='search-by-study-cycle'
-            value={studyCycleFilter}
-            onChange={(e) => {
-              setStudyCycleFilter(e.target.value)
-              filterStudents(
-                emailFilter,
-                studyProgramFilter,
-                e.target.value,
-                studyYearFilter
-              )
-            }}
+            value={filters.studyCycle}
+            onChange={(e) => handleFilterChange('studyCycle', e.target.value)}
           >
             <option value={''}>*</option>
             <option value={'licenta'}>Licenta</option>
@@ -146,22 +106,14 @@ function ManageStudents() {
           <select
             className='form-control'
             id='search-by-study-year'
-            value={studyYearFilter}
-            onChange={(e) => {
-              setStudyYearFilter(e.target.value)
-              filterStudents(
-                emailFilter,
-                studyProgramFilter,
-                studyCycleFilter,
-                e.target.value
-              )
-            }}
+            value={filters.studyYear}
+            onChange={(e) => handleFilterChange('studyYear', e.target.value)}
           >
-            <option value={-1}>*</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
+            <option value={''}>*</option>
+            <option value={'1'}>1</option>
+            <option value={'2'}>2</option>
+            <option value={'3'}>3</option>
+            <option value={'4'}>4</option>
           </select>
         </div>
       </div>

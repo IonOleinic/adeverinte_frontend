@@ -5,6 +5,7 @@ import CertificateNavbar from '../../components/CertificateComponents/Certificat
 import CertificateOptions from '../../components/CertificateComponents/CertificateOptions/CertificateOptions'
 import AddCertificate from '../../components/CertificateComponents/AddCertificate/AddCertificate'
 import ManageCertificates from '../../components/CertificateComponents/ManageCertificates/ManageCertificates'
+import EditCertificate from '../../components/CertificateComponents/EditCertificate/EditCertificate'
 
 function Certificates() {
   return (
@@ -16,7 +17,7 @@ function Certificates() {
           <Route path='manage-certificates' element={<ManageCertificates />} />
           <Route
             path='manage-certificates/edit-certificate/:registrationNr'
-            element={<h1>Editeaza adeverinta</h1>}
+            element={<EditCertificate />}
           />
           <Route path='add-certificate' element={<AddCertificate />} />
           <Route path='certificate-options' element={<CertificateOptions />} />

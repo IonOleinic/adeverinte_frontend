@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { axiosPrivate } from '../../../api/api'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import './AddCertificate.css'
 
 function AddCertificate() {
@@ -36,6 +37,11 @@ function AddCertificate() {
     const form = document.getElementById('add-certificate-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
+      setDisabledAddBtn(true)
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
     }
     form.classList.add('was-validated')
 
@@ -45,7 +51,13 @@ function AddCertificate() {
           studentEmail,
           certificatePurpose,
         })
-        setDisabledAddBtn(true)
+
+        const response = await axiosPrivate.get(
+          `/student?email=${studentEmail}`
+        )
+        toast.success(
+          `A fost adaugată o nouă adeverință pentru ${response.data?.fullName}`
+        )
         setTimeout(() => {
           navigate('/certificates/manage-certificates')
         }, 500)
@@ -62,6 +74,10 @@ function AddCertificate() {
           setServerErrorMessage(
             'Nu s-a putut genera numar de înregistrare. Setati numar NR si apoi reincercati.'
           )
+          toast.error(
+            `Eroare. Setati numar NR de la optiuni si apoi reincercati.`,
+            { theme: 'colored', autoClose: false }
+          )
         }
       }
     }
@@ -69,6 +85,28 @@ function AddCertificate() {
   useEffect(() => {
     setServerErrorBool(false)
   }, [studentEmail, certificatePurpose])
+
+  useEffect(() => {
+    return () => {
+      setTimeout(() => {
+        toast.dismiss()
+      }, 2000)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (invalidStudentEmailBool || invalidCertificatePurposeBool) {
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
+    }
+  }, [invalidStudentEmailBool, invalidCertificatePurposeBool])
+
+  useEffect(() => {
+    toast.dismiss()
+  }, [studentEmail, certificatePurpose])
+
   return (
     <div className='add-certificate'>
       <div className='add-certificate-info'>
@@ -85,15 +123,16 @@ function AddCertificate() {
         </div>
       </div>
       <div className='add-certificate-form-container'>
-        <div className='card border-0 rounded-3 my-5 add-certificate-card'>
-          <div className='card-body p-4 p-sm-5 add-certificate-card-body'>
+        <div className='card border-0 rounded-3 my-5 certificate-card'>
+          <div className='card-body p-4 p-sm-5 certificate-card-body'>
             <h3 className='card-title text-center mb-3  fs-3'>
               Adaugă adeverință
             </h3>
             <form
-              className='add-certificate-form needs-validation'
+              className='certificate-form needs-validation'
               id='add-certificate-form'
               noValidate
+              onSubmit={AddCertificate}
             >
               <div className='form-floating mb-3'>
                 <input
@@ -117,8 +156,8 @@ function AddCertificate() {
                 <div
                   className={
                     invalidStudentEmailBool
-                      ? 'invalid-feedback add-certificate-form-invalid-feedback'
-                      : 'invalid-feedback add-certificate-form-valid-feedback'
+                      ? 'invalid-feedback certificate-form-invalid-feedback'
+                      : 'invalid-feedback certificate-form-valid-feedback'
                   }
                 >
                   {invalidStudentEmailMessage}
@@ -150,8 +189,8 @@ function AddCertificate() {
                 <div
                   className={
                     invalidCertificatePurposeBool
-                      ? 'invalid-feedback add-certificate-form-invalid-feedback'
-                      : 'invalid-feedback add-certificate-form-valid-feedback'
+                      ? 'invalid-feedback certificate-form-invalid-feedback'
+                      : 'invalid-feedback certificate-form-valid-feedback'
                   }
                 >
                   {invalidCertificatePurposeMessage}
@@ -160,8 +199,8 @@ function AddCertificate() {
               <div
                 className={
                   serverErrorBool
-                    ? 'invalid-feedback add-certificate-form-invalid-feedback'
-                    : 'invalid-feedback add-certificate-form-valid-feedback'
+                    ? 'invalid-feedback certificate-form-invalid-feedback'
+                    : 'invalid-feedback certificate-form-valid-feedback'
                 }
               >
                 {serverErrorMessage}
@@ -172,7 +211,7 @@ function AddCertificate() {
                   disabled={disabledAddBtn}
                   className='btn btn-primary fw-bold btn-add-certificate'
                   type='submit'
-                  onClick={AddCertificate}
+                  onSubmit={AddCertificate}
                 >
                   Adaugă
                 </button>

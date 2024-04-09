@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { axiosPrivate } from '../../../api/api'
+import { toast } from 'react-toastify'
 
 import './EditStudent.css'
 
@@ -59,9 +60,14 @@ function EditStudent() {
 
   const editStudent = async (e) => {
     e.preventDefault()
+    setDisabledEditBtn(true)
     const form = document.getElementById('edit-student-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
     }
     form.classList.add('was-validated')
 
@@ -78,7 +84,7 @@ function EditStudent() {
           financing,
           sex,
         })
-        setDisabledEditBtn(true)
+        toast.success(`Studentul ${fullName} a fost actualizat cu succes.`)
         setTimeout(() => {
           navigate('/students')
         }, 500)
@@ -87,6 +93,27 @@ function EditStudent() {
       }
     }
   }
+
+  useEffect(() => {
+    toast.dismiss()
+  }, [
+    email,
+    fullName,
+    studyDomain,
+    studyProgram,
+    studyCycle,
+    studyYear,
+    educationForm,
+    financing,
+  ])
+
+  useEffect(() => {
+    return () => {
+      setTimeout(() => {
+        toast.dismiss()
+      }, 2000)
+    }
+  }, [])
 
   return (
     <div className='student-form-container'>
@@ -99,6 +126,7 @@ function EditStudent() {
             className='student-form needs-validation'
             id='edit-student-form'
             noValidate
+            onSubmit={editStudent}
           >
             <div className='student-email-and-name'>
               <div className='form-floating mb-3'>
@@ -262,14 +290,23 @@ function EditStudent() {
               </div>
             </div>
             <hr className='my-4' />
-            <div className='d-grid div-btn-add-student'>
+            <div className='d-grid div-btn-edit-student'>
               <button
-                className='btn btn-primary fw-bold btn-add-student'
+                className='btn btn-primary fw-bold btn-edit-student'
                 type='submit'
                 disabled={disabledEditBtn}
-                onClick={editStudent}
+                onSubmit={editStudent}
               >
                 Editeaza
+              </button>
+              <button
+                type='button'
+                className='btn btn-danger fw-bold btn-cancel-edit-student'
+                onClick={() => {
+                  navigate('/students/manage-students')
+                }}
+              >
+                Anulează
               </button>
             </div>
           </form>
