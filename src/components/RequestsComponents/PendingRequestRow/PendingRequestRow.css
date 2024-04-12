@@ -1,0 +1,102 @@
+.pending-request-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 1rem;
+  gap: 0.5rem;
+}
+.pending-request-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.pending-request-row td {
+  text-align: left;
+}
+.pending-request-row-item {
+  width: 150px;
+}
+.pending-request-row-date {
+  width: 90px;
+}
+.pending-request-row-email {
+  width: 250px;
+  word-break: break-all;
+}
+.request-row-purpose-form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pending-request-row-purpose {
+  width: 250px;
+}
+.pending-request-study-domain {
+  width: 270px;
+}
+.pending-request-fullname {
+  width: 170px;
+}
+.btn-save-purpose {
+  font-size: 0.8rem;
+  padding: 0.3rem;
+}
+.btn-save-purpose-hidden {
+  visibility: hidden;
+}
+.pending-request-row-purpose-input {
+  background-color: transparent;
+}
+.pending-request-row-purpose-input:hover {
+  border-color: var(--light-blue);
+}
+.pending-request-row-buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.2rem;
+  width: 100px;
+  /* margin-left: 3rem; */
+}
+.pending-request-row-button {
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.pending-request-row-accept {
+  border: 1px solid var(--light-green);
+  color: var(--light-green);
+}
+.pending-request-row-accept:hover {
+  background-color: var(--light-green);
+  color: white;
+  cursor: pointer;
+}
+.pending-request-row-accept:disabled {
+  color: var(--light-grey);
+  border-color: var(--light-grey);
+  cursor: initial;
+  background-color: initial;
+}
+
+.pending-request-row-reject {
+  color: var(--light-red);
+  border: 1px solid var(--light-red);
+}
+.pending-request-row-reject:hover {
+  background-color: var(--light-red);
+  color: white;
+  cursor: pointer;
+}

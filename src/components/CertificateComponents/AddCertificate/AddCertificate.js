@@ -27,6 +27,7 @@ function AddCertificate() {
     setInvalidStudentEmailBool(false)
     setInvalidCertificatePurposeBool(false)
     setServerErrorBool(false)
+    setDisabledAddBtn(true)
     if (certificatePurpose.length < 5) {
       setInvalidCertificatePurposeBool(true)
       setInvalidCertificatePurposeMessage(
@@ -37,7 +38,6 @@ function AddCertificate() {
     const form = document.getElementById('add-certificate-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
-      setDisabledAddBtn(true)
       toast.error('Eroare. Verificati datele introduse.', {
         theme: 'colored',
         autoClose: false,

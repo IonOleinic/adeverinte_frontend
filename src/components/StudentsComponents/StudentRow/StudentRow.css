@@ -37,17 +37,19 @@
   gap: 1.2rem;
   width: 70px;
 }
+.student-row-button {
+  border: none;
+  background-color: transparent;
+}
 .student-row-edit {
   color: var(--very-light-blue);
 }
 .student-row-edit:hover {
   color: var(--hover-blue);
-  cursor: pointer;
 }
 .student-row-delete {
   color: var(--very-light-red);
 }
 .student-row-delete:hover {
   color: var(--hover-red);
-  cursor: pointer;
 }

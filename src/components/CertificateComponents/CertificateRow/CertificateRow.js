@@ -3,6 +3,7 @@ import { CiEdit } from 'react-icons/ci'
 import { CiTrash } from 'react-icons/ci'
 import { IoPrintOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
+import { confirmDialog } from 'primereact/confirmdialog'
 import './CertificateRow.css'
 
 function CertificateRow({ certificate, deleteCertificate }) {
@@ -29,7 +30,7 @@ function CertificateRow({ certificate, deleteCertificate }) {
           <div
             className='certificate-row-print'
             onClick={() => {
-              // deleteStudent(student.id)
+              //
             }}
           >
             <IoPrintOutline size={23} />
@@ -49,7 +50,19 @@ function CertificateRow({ certificate, deleteCertificate }) {
           <div
             className='certificate-row-delete'
             onClick={() => {
-              deleteCertificate(certificate.registrationNr)
+              confirmDialog({
+                message: `Sunteți sigur că doriți să ștergeți adeverința ${certificate.registrationNr}?`,
+                header: 'Confimare ștergere adeverință',
+                icon: 'pi pi-info-circle',
+                defaultFocus: 'reject',
+                acceptClassName: 'p-button-danger',
+                acceptLabel: 'Da',
+                rejectLabel: 'Nu',
+                accept: () => {
+                  deleteCertificate(certificate.registrationNr)
+                },
+                reject: () => {},
+              })
             }}
           >
             <CiTrash size={23} />

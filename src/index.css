@@ -8,6 +8,7 @@
   --table-row-odd-color: #eeeeee;
   --light-red: #dc3545;
   --very-light-red: #fb4f60;
+  --light-green: rgb(2, 208, 2);
   --light-grey: #ccc;
   --basic-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
@@ -58,4 +59,26 @@ h6 {
   gap: 1rem;
   padding: 1rem;
   box-shadow: var(--basic-box-shadow); /* Basic grey box-shadow */
+}
+
+.p-dialog,
+.p-dialog-content,
+.p-dialog-header,
+.p-dialog-footer {
+  padding: 1rem;
+}
+.p-dialog {
+  border: none;
+}
+.p-button,
+.p-component {
+  font-size: 1rem;
+}
+
+.p-button {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+}
+.p-confirm-dialog-message {
+  margin-left: 1rem;
 }

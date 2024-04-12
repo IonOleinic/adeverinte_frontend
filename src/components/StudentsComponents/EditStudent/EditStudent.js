@@ -44,23 +44,10 @@ function EditStudent() {
     getStudent()
   }, [studentId])
 
-  useEffect(() => {
-    setDisabledEditBtn(false)
-  }, [
-    email,
-    fullName,
-    studyDomain,
-    studyProgram,
-    studyCycle,
-    studyYear,
-    financing,
-    sex,
-    educationForm,
-  ])
-
   const editStudent = async (e) => {
     e.preventDefault()
     setDisabledEditBtn(true)
+    toast.dismiss()
     const form = document.getElementById('edit-student-form')
     if (!form.checkValidity()) {
       e.stopPropagation()

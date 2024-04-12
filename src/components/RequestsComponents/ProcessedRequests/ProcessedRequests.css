@@ -1,0 +1,68 @@
+.processed-requests {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.processed-requests-toolbar {
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid var(--light-grey);
+  margin-bottom: 2rem;
+  border-radius: 6px;
+  padding: 0 2rem;
+  gap: 2rem;
+}
+.processed-requests-toolbar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.processed-requests-toolbar-item select {
+  appearance: auto !important;
+}
+.processed-requests-toolbar-item input {
+  width: 220px;
+}
+.search-requests-by-study-cycle select {
+  width: 130px;
+}
+.search-requests-by-study-year select {
+  width: 70px;
+}
+.processed-requests-toolbar-item label {
+  word-break: keep-all;
+  font-weight: 500;
+}
+.processed-requests-list {
+  display: flex;
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.processed-requests-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Required for sticky thead */
+}
+.processed-requests-table thead {
+  position: sticky;
+  top: 0; /* Stick the thead to the top */
+  z-index: 1; /* Ensure thead is above tbody */
+}
+
+.processed-requests-table th {
+  text-align: left;
+}
+
+.processed-request-row-header {
+  background-color: white !important;
+}

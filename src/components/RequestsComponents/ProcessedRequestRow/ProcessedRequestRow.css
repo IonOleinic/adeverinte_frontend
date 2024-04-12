@@ -1,0 +1,34 @@
+.processed-request-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 0.5rem;
+}
+.processed-request-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.processed-request-row td {
+  text-align: left;
+}
+.processed-request-row-item {
+  width: 150px;
+}
+.processed-request-row-date {
+  width: 130px;
+}
+.processed-request-row-email {
+  width: 280px;
+  word-break: break-all;
+}
+.processed-request-row-purpose {
+  width: 220px;
+}
+.processed-request-row-accepted {
+  width: 100px;
+}
+.processed-request-row-rejected-reason {
+  width: 180px;
+}
