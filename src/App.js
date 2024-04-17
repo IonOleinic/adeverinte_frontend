@@ -1,45 +1,55 @@
-import Navbar from './components/Navbar/Navbar'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Students from './pages/Students/Students'
 import Requests from './pages/Requests/Requests'
 import Certificates from './pages/Certificates/Certificates'
 import Reports from './pages/Reports/Reports'
 import Settings from './pages/Settings/Settings'
-import { ConfirmDialog } from 'primereact/confirmdialog' // For <ConfirmDialog /> component
-import { ToastContainer } from 'react-toastify'
+import SignIn from './pages/SignIn/SignIn'
+import AppLayout from './components/Layouts/AppLayout'
+import PrivatePagesLayout from './components/Layouts/PrivatePagesLayout'
+import RequireAuth from './components/Auth/RequireAuth'
+import PersistLogin from './components/Auth/PersistLogin'
+import NotFound from './pages/NotFound/NotFound'
+import axios from './api/api'
+import { useEffect, useState } from 'react'
 
 function App() {
+  const [roles, setRoles] = useState([])
+
+  const getAllRoles = async () => {
+    try {
+      const response = await axios.get('/roles')
+      setRoles(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getAllRoles()
+  }, [])
   return (
-    <>
-      <ToastContainer
-        position='bottom-right'
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme='light'
-      />
-      <ConfirmDialog />
-      <div className='app-container'>
-        <Navbar />
-        <div className='page-container'>
-          <Routes>
-            <Route path='/' element={<Requests />} />
-            <Route path='/reports' element={<Reports />} />
-            <Route path='/certificates/*' element={<Certificates />} />
-            <Route path='/students/*' element={<Students />} />
-            <Route path='/requests/*' element={<Requests />} />
-            <Route path='/settings' element={<Settings />} />
-          </Routes>
-        </div>
-        <footer></footer>
-      </div>
-    </>
+    <Routes>
+      <Route path='/' element={<AppLayout />}>
+        {/* public routes */}
+        <Route path='/signin' element={<SignIn />} />
+        {/* private routes */}
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRoles={[roles.Secretar]} />}>
+            <Route element={<PrivatePagesLayout />}>
+              <Route index element={<Navigate to='/requests' />} />
+              <Route path='requests/*' element={<Requests />} />
+              <Route path='certificates/*' element={<Certificates />} />
+              <Route path='students/*' element={<Students />} />
+              <Route path='reports' element={<Reports />} />
+              <Route element={<RequireAuth allowedRoles={[roles.Admin]} />}>
+                <Route path='settings' element={<Settings />} />
+              </Route>
+              <Route path='*' element={<NotFound />} />
+            </Route>
+          </Route>
+        </Route>
+      </Route>
+    </Routes>
   )
 }
-
 export default App

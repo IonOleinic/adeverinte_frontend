@@ -5,12 +5,19 @@
   --hover-blue: rgb(35, 68, 255);
   --active-blue: rgb(35, 68, 255);
   --hover-red: #dc1428;
-  --table-row-odd-color: #eeeeee;
+  /* --table-row-odd-color: #eeeeee; */
+  --table-row-odd-color: #a6cbfe29;
   --light-red: #dc3545;
   --very-light-red: #fb4f60;
   --light-green: rgb(2, 208, 2);
   --light-grey: #ccc;
   --basic-box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -20,11 +27,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 p,
 ul,
@@ -57,10 +59,20 @@ h6 {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem;
+  padding: 0.75rem;
   box-shadow: var(--basic-box-shadow); /* Basic grey box-shadow */
 }
 
+/* table styles */
+table td > p {
+  text-align: left;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* primereact styles */
 .p-dialog,
 .p-dialog-content,
 .p-dialog-header,
@@ -81,4 +93,15 @@ h6 {
 }
 .p-confirm-dialog-message {
   margin-left: 1rem;
+}
+
+.p-paginator,
+.p-dropdown {
+  margin-left: 0.5rem;
+}
+
+.p-dropdown-label {
+  padding: 0.3rem;
+  padding-left: 0.5rem;
+  text-align: center;
 }

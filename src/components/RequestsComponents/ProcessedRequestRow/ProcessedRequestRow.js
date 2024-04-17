@@ -8,7 +8,9 @@ const getFormatedDate = (date) => {
   const dateObj = new Date(date)
   return `${dateObj.getDate()}.${addZero(
     dateObj.getMonth() + 1
-  )}.${dateObj.getFullYear()} ${dateObj.getHours()}:${dateObj.getMinutes()}`
+  )}.${dateObj.getFullYear()} ${addZero(dateObj.getHours())}:${addZero(
+    dateObj.getMinutes()
+  )}`
 }
 
 const addZero = (number) => {
@@ -19,22 +21,33 @@ function RequestRow({ request, deleteRequest }) {
   return (
     <tr className='processed-request-row'>
       <td className='processed-request-row-item processed-request-row-date'>
-        {getFormatedDate(request.date)}
+        <p>{getFormatedDate(request.date)}</p>
       </td>
       <td className='processed-request-row-item processed-request-row-email'>
-        {request.studentEmail}
+        <p>{request.studentEmail}</p>
       </td>
       <td className='processed-request-row-item processed-request-row-purpose'>
-        {request.certificatePurpose}
+        <p>{request.certificatePurpose}</p>
       </td>
       <td className='processed-request-row-item processed-request-row-handled-by'>
-        {request.handledBy || '-'}
+        <p>{request.handledBy || '-'}</p>
       </td>
       <td className='processed-request-row-item processed-request-row-accepted'>
-        {request.accepted ? 'Da' : 'Nu'}
+        <p>{request.accepted ? 'Da' : 'Nu'}</p>
       </td>
       <td className='processed-request-row-item processed-request-row-rejected-reason'>
-        {request.rejectedReason || '-'}
+        <p>{request.rejectedReason || '-'}</p>
+      </td>
+      {/* only for debugging purposes */}
+      <td className='processed-request-row-item processed-request-row-buttons'>
+        <button
+          className='processed-request-row-button processed-request-row-delete'
+          onClick={() => {
+            deleteRequest(request.id)
+          }}
+        >
+          <CiTrash size={23} />
+        </button>
       </td>
     </tr>
   )

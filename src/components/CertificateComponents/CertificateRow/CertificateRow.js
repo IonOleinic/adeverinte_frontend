@@ -11,63 +11,61 @@ function CertificateRow({ certificate, deleteCertificate }) {
   return (
     <tr className='certificate-row'>
       <td className='certificate-row-item certificate-row-registration-nr'>
-        {certificate.registrationNr}
+        <p>{certificate.registrationNr}</p>
       </td>
       <td className='certificate-row-item certificate-row-fullname'>
-        {certificate.fullName}
+        <p>{certificate.fullName}</p>
       </td>
       <td className='certificate-row-item certificate-row-email'>
-        {certificate.studentEmail}
+        <p>{certificate.studentEmail}</p>
       </td>
       <td className='certificate-row-item certificate-row-purpose'>
-        {certificate.certificatePurpose}
+        <p>{certificate.certificatePurpose}</p>
       </td>
       <td className='certificate-row-item certificate-row-printed'>
-        {certificate.printed ? 'Da' : 'Nu'}
+        <p>{certificate.printed ? 'Da' : 'Nu'}</p>
       </td>
-      <td>
-        <div className='certificate-row-item certificate-row-buttons'>
-          <div
-            className='certificate-row-print'
-            onClick={() => {
-              //
-            }}
-          >
-            <IoPrintOutline size={23} />
-          </div>
-          <div
-            className='certificate-row-edit'
-            onClick={(e) => {
-              navigate(
-                `/certificates/manage-certificates/edit-certificate/${encodeURIComponent(
-                  certificate.registrationNr
-                )}`
-              )
-            }}
-          >
-            <CiEdit size={23} />
-          </div>
-          <div
-            className='certificate-row-delete'
-            onClick={() => {
-              confirmDialog({
-                message: `Sunteți sigur că doriți să ștergeți adeverința ${certificate.registrationNr}?`,
-                header: 'Confimare ștergere adeverință',
-                icon: 'pi pi-info-circle',
-                defaultFocus: 'reject',
-                acceptClassName: 'p-button-danger',
-                acceptLabel: 'Da',
-                rejectLabel: 'Nu',
-                accept: () => {
-                  deleteCertificate(certificate.registrationNr)
-                },
-                reject: () => {},
-              })
-            }}
-          >
-            <CiTrash size={23} />
-          </div>
-        </div>
+      <td className='certificate-row-item certificate-row-buttons'>
+        <button
+          className='certificate-row-button certificate-row-print'
+          onClick={() => {
+            //
+          }}
+        >
+          <IoPrintOutline size={23} />
+        </button>
+        <button
+          className='certificate-row-button certificate-row-edit'
+          onClick={(e) => {
+            navigate(
+              `/certificates/manage-certificates/edit-certificate/${encodeURIComponent(
+                certificate.registrationNr
+              )}`
+            )
+          }}
+        >
+          <CiEdit size={23} />
+        </button>
+        <button
+          className='certificate-row-button certificate-row-delete'
+          onClick={() => {
+            confirmDialog({
+              message: `Sunteți sigur că doriți să ștergeți adeverința ${certificate.registrationNr}?`,
+              header: 'Confimare ștergere adeverință',
+              icon: 'pi pi-info-circle',
+              defaultFocus: 'reject',
+              acceptClassName: 'p-button-danger',
+              acceptLabel: 'Da',
+              rejectLabel: 'Nu',
+              accept: () => {
+                deleteCertificate(certificate.registrationNr)
+              },
+              reject: () => {},
+            })
+          }}
+        >
+          <CiTrash size={23} />
+        </button>
       </td>
     </tr>
   )

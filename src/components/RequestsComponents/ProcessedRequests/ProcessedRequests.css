@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: flex-start;
   border: 1px solid var(--light-grey);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   border-radius: 6px;
   padding: 0 2rem;
   gap: 2rem;
@@ -43,12 +43,31 @@
 }
 .processed-requests-list {
   display: flex;
+  position: relative;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+}
+.processed-requests-table-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 90%;
   overflow-y: auto; /* Enable vertical scrolling */
 }
-
+.processed-requests-paginator {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
 .processed-requests-table {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative; /* Required for sticky thead */

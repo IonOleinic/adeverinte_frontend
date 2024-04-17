@@ -1,3 +1,25 @@
+.signin {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.sigin-usv-logo {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.signin-card {
+  margin-top: 2rem !important;
+}
+.sigin-usv-logo img {
+  width: 100%;
+}
+
 .btn-signin {
   font-size: 0.9rem;
   letter-spacing: 0.05rem;

@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
 
 import './EditStudent.css'
 
 function EditStudent() {
+  const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
   const { studentId } = useParams()
 

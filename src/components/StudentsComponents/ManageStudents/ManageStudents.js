@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import './ManageStudents.css'
 import StudentRow from '../StudentRow/StudentRow'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
+import { Paginator } from 'primereact/paginator'
 import { toast } from 'react-toastify'
 
 function ManageStudents() {
+  const axiosPrivate = useAxiosPrivate()
   const [students, setStudents] = useState([])
   const [filters, setFilters] = useState({
     email: '',
@@ -12,6 +14,8 @@ function ManageStudents() {
     studyCycle: '',
     studyYear: '',
   })
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(7)
 
   const getStudents = async () => {
     try {
@@ -54,11 +58,20 @@ function ManageStudents() {
     })
   }, [students, filters])
 
+  const displayedStudents = useMemo(() => {
+    return filteredStudents.slice(first, first + rows)
+  }, [filteredStudents, first, rows])
+
   const handleFilterChange = (filter, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [filter]: value,
     }))
+  }
+
+  const onPageChange = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
   }
 
   return (
@@ -118,36 +131,47 @@ function ManageStudents() {
         </div>
       </div>
       <div className='manage-students-list'>
-        <table className='manage-students-table'>
-          <thead>
-            <tr className='student-row student-row-header'>
-              <th className='student-row-item student-row-fullname'>
-                Nume complet
-              </th>
-              <th className='student-row-item student-row-email'>Email</th>
-              <th className='student-row-item student-row-study-domain'>
-                Domeniul de studii
-              </th>
-              <th className='student-row-item student-row-study-program'>
-                Program de studii
-              </th>
-              <th className='student-row-item student-row-study-cycle'>
-                Ciclu de studii
-              </th>
-              <th className='student-row-item student-row-study-year'>An</th>
-              <th className='student-row-item student-row-buttons'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredStudents.map((student) => (
-              <StudentRow
-                key={student.id}
-                student={student}
-                deleteStudent={deleteStudent}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className='manage-students-table-container'>
+          <table className='manage-students-table'>
+            <thead>
+              <tr className='student-row student-row-header'>
+                <th className='student-row-item student-row-fullname'>
+                  Nume complet
+                </th>
+                <th className='student-row-item student-row-email'>Email</th>
+                <th className='student-row-item student-row-study-domain'>
+                  Domeniul de studii
+                </th>
+                <th className='student-row-item student-row-study-program'>
+                  Program de studii
+                </th>
+                <th className='student-row-item student-row-study-cycle'>
+                  Ciclu de studii
+                </th>
+                <th className='student-row-item student-row-study-year'>An</th>
+                <th className='student-row-item student-row-buttons'></th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedStudents.map((student) => (
+                <StudentRow
+                  key={student.id}
+                  student={student}
+                  deleteStudent={deleteStudent}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className='manage-students-paginator'>
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={filteredStudents.length}
+            rowsPerPageOptions={[7, 10, 20]}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
     </div>
   )

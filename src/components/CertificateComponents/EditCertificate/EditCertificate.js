@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import './EditCertificate.css'
 
 function EditCertificate() {
+  const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
   const { registrationNr } = useParams()
   const [studentEmail, setStudentEmail] = useState('')

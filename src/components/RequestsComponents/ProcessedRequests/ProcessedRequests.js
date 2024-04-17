@@ -1,24 +1,28 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { axiosPrivate } from '../../../api/api'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import './ProcessedRequests.css'
+import { Paginator } from 'primereact/paginator'
 import ProcessedRequestRow from '../ProcessedRequestRow/ProcessedRequestRow'
 
 function ProcessedRequests() {
+  const axiosPrivate = useAxiosPrivate()
   const [processedRequests, setProcessedRequests] = useState([])
   const [filters, setFilters] = useState({
     studentEmail: '',
     handledBy: '',
     accepted: '',
   })
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(7)
 
-  const deleteRequest = async (id) => {
+  const deleteRequest = useCallback(async (id) => {
     try {
       await axiosPrivate.delete(`/certificate-request/${id}`)
       getProcessedRequests()
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [])
 
   const getProcessedRequests = async () => {
     try {
@@ -48,9 +52,18 @@ function ProcessedRequests() {
     })
   }, [processedRequests, filters])
 
+  const displayedRequests = useMemo(() => {
+    return filteredRequests.slice(first, first + rows)
+  }, [filteredRequests, first, rows])
+
   useEffect(() => {
     getProcessedRequests()
   }, [])
+
+  const onPageChange = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
+  }
 
   const handleFilterChange = (filter, value) => {
     setFilters((prevFilters) => ({
@@ -99,39 +112,50 @@ function ProcessedRequests() {
         </div>
       </div>
       <div className='processed-requests-list'>
-        <table className='processed-requests-table'>
-          <thead>
-            <tr className='processed-request-row processed-request-row-header'>
-              <th className='processed-request-row-item processed-request-row-date'>
-                Data
-              </th>
-              <th className='processed-request-row-item processed-request-row-email'>
-                Email student
-              </th>
-              <th className='processed-request-row-item processed-request-row-purpose'>
-                Scopul adeverinței
-              </th>
-              <th className='processed-request-row-item processed-request-row-handled-by'>
-                Procesată de
-              </th>
-              <th className='processed-request-row-item processed-request-row-accepted'>
-                Acceptată
-              </th>
-              <th className='processed-request-row-item processed-request-row-rejected-reason'>
-                Motiv respingere
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRequests.map((request) => (
-              <ProcessedRequestRow
-                key={request.id}
-                request={request}
-                deleteRequest={deleteRequest}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className='processed-requests-table-container'>
+          <table className='processed-requests-table'>
+            <thead>
+              <tr className='processed-request-row processed-request-row-header'>
+                <th className='processed-request-row-item processed-request-row-date'>
+                  Data
+                </th>
+                <th className='processed-request-row-item processed-request-row-email'>
+                  Email student
+                </th>
+                <th className='processed-request-row-item processed-request-row-purpose'>
+                  Scopul adeverinței
+                </th>
+                <th className='processed-request-row-item processed-request-row-handled-by'>
+                  Procesată de
+                </th>
+                <th className='processed-request-row-item processed-request-row-accepted'>
+                  Acceptată
+                </th>
+                <th className='processed-request-row-item processed-request-row-rejected-reason'>
+                  Motiv respingere
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedRequests.map((request) => (
+                <ProcessedRequestRow
+                  key={request.id}
+                  request={request}
+                  deleteRequest={deleteRequest}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className='processed-requests-paginator'>
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={filteredRequests.length}
+            rowsPerPageOptions={[7, 10, 20]}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
     </div>
   )

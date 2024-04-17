@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import CertificateRow from '../CertificateRow/CertificateRow'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
+import { Paginator } from 'primereact/paginator'
 import './ManageCertificates.css'
 
 function ManageCertificates() {
+  const axiosPrivate = useAxiosPrivate()
   const [certificates, setCertificates] = useState([])
   const [filters, setFilters] = useState({
     registrationNr: '',
     studentEmail: '',
     printed: '',
   })
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(7)
 
   const getCertificates = async () => {
     try {
@@ -40,6 +44,10 @@ function ManageCertificates() {
     })
   }, [certificates, filters])
 
+  const displayedCertificates = useMemo(() => {
+    return filteredCertificates.slice(first, first + rows)
+  }, [filteredCertificates, first, rows])
+
   const deleteCertificate = async (registrationNr) => {
     try {
       await axiosPrivate.delete(
@@ -61,6 +69,10 @@ function ManageCertificates() {
       ...prevFilters,
       [filter]: value,
     }))
+  }
+  const onPageChange = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
   }
 
   return (
@@ -109,37 +121,48 @@ function ManageCertificates() {
         </div>
       </div>
       <div className='manage-certificates-list'>
-        <table className='manage-certificates-table'>
-          <thead>
-            <tr className='certificate-row certificate-row-header'>
-              <th className='certificate-row-item certificate-row-registration-nr'>
-                Nr înregistrare
-              </th>
-              <th className='certificate-row-item certificate-row-fullname'>
-                Nume complet
-              </th>
-              <th className='certificate-row-item certificate-row-email'>
-                Email
-              </th>
-              <th className='certificate-row-item certificate-row-purpose'>
-                Scopul adeverinței
-              </th>
-              <th className='certificate-row-item certificate-row-printed'>
-                Printată
-              </th>
-              <th className='certificate-row-item certificate-row-buttons'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCertificates.map((certificate) => (
-              <CertificateRow
-                key={certificate.registrationNr}
-                certificate={certificate}
-                deleteCertificate={deleteCertificate}
-              />
-            ))}
-          </tbody>
-        </table>
+        <div className='manage-certificates-table-container'>
+          <table className='manage-certificates-table'>
+            <thead>
+              <tr className='certificate-row certificate-row-header'>
+                <th className='certificate-row-item certificate-row-registration-nr'>
+                  Nr înregistrare
+                </th>
+                <th className='certificate-row-item certificate-row-fullname'>
+                  Nume complet
+                </th>
+                <th className='certificate-row-item certificate-row-email'>
+                  Email
+                </th>
+                <th className='certificate-row-item certificate-row-purpose'>
+                  Scopul adeverinței
+                </th>
+                <th className='certificate-row-item certificate-row-printed'>
+                  Printată
+                </th>
+                <th className='certificate-row-item certificate-row-buttons'></th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedCertificates.map((certificate) => (
+                <CertificateRow
+                  key={certificate.registrationNr}
+                  certificate={certificate}
+                  deleteCertificate={deleteCertificate}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className='manage-certificates-paginator'>
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={filteredCertificates.length}
+            rowsPerPageOptions={[7, 10, 20]}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
     </div>
   )

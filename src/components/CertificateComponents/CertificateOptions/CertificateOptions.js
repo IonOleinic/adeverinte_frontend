@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
 import './CertificateOptions.css'
 
 function CertificateOptions() {
+  const axiosPrivate = useAxiosPrivate()
   const [NR, setNR] = useState('')
   const [mask, setMask] = useState('')
   const [invalidMaskBool, setinvalidMaskBool] = useState(false)

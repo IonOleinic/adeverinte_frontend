@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { axiosPrivate } from '../../../api/api'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -7,6 +7,7 @@ import './AddCertificate.css'
 
 function AddCertificate() {
   const navigate = useNavigate()
+  const axiosPrivate = useAxiosPrivate()
   const [studentEmail, setStudentEmail] = useState('')
   const [certificatePurpose, setCertificatePurpose] = useState('')
   const [invalidStudentEmailBool, setInvalidStudentEmailBool] = useState(false)

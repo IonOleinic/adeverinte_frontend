@@ -10,20 +10,22 @@ function StudentRow({ student, deleteStudent }) {
   return (
     <tr className='student-row'>
       <td className='student-row-item student-row-fullname'>
-        {student.fullName}
+        <p>{student.fullName}</p>
       </td>
-      <td className='student-row-item student-row-email'>{student.email}</td>
+      <td className='student-row-item student-row-email'>
+        <p>{student.email}</p>
+      </td>
       <td className='student-row-item student-row-study-domain'>
-        {student.studyDomain}
+        <p>{student.studyDomain}</p>
       </td>
       <td className='student-row-item student-row-study-program'>
-        {student.studyProgram}
+        <p>{student.studyProgram}</p>
       </td>
       <td className='student-row-item student-row-study-cycle'>
-        {student.studyCycle}
+        <p>{student.studyCycle}</p>
       </td>
       <td className='student-row-item student-row-study-year'>
-        {student.studyYear}
+        <p>{student.studyYear}</p>
       </td>
       <td className='student-row-item student-row-buttons'>
         <button

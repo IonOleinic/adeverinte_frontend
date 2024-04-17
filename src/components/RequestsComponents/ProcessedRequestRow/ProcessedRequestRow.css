@@ -32,3 +32,21 @@
 .processed-request-row-rejected-reason {
   width: 180px;
 }
+
+.processed-request-row-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.5rem;
+  width: 50px;
+}
+.processed-request-row-button {
+  border: none;
+  background-color: transparent;
+}
+.processed-request-row-delete {
+  color: var(--very-light-red);
+}
+.processed-request-row-delete:hover {
+  color: var(--hover-red);
+}

@@ -39,24 +39,25 @@
   gap: 1.5rem;
   width: 50px;
 }
+.certificate-row-button {
+  border: none;
+  background-color: transparent;
+}
 .certificate-row-edit {
   color: var(--very-light-blue);
 }
 .certificate-row-edit:hover {
   color: var(--hover-blue);
-  cursor: pointer;
 }
 .certificate-row-delete {
   color: var(--very-light-red);
 }
 .certificate-row-delete:hover {
   color: var(--hover-red);
-  cursor: pointer;
 }
 .certificate-row-print {
   color: rgb(106, 106, 106);
 }
 .certificate-row-print:hover {
   color: black;
-  cursor: pointer;
 }
