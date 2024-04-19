@@ -10,23 +10,10 @@ import PrivatePagesLayout from './components/Layouts/PrivatePagesLayout'
 import RequireAuth from './components/Auth/RequireAuth'
 import PersistLogin from './components/Auth/PersistLogin'
 import NotFound from './pages/NotFound/NotFound'
-import axios from './api/api'
-import { useEffect, useState } from 'react'
+import useRoles from './hooks/useRoles'
 
 function App() {
-  const [roles, setRoles] = useState([])
-
-  const getAllRoles = async () => {
-    try {
-      const response = await axios.get('/roles')
-      setRoles(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  useEffect(() => {
-    getAllRoles()
-  }, [])
+  const { roles } = useRoles()
   return (
     <Routes>
       <Route path='/' element={<AppLayout />}>

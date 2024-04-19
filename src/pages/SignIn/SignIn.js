@@ -39,7 +39,7 @@ function SignIn() {
         console.log(response.data)
         const accessToken = response.data.accessToken
         const roles = response.data.roles
-        setAuth({ email, password, accessToken, roles })
+        setAuth({ email, accessToken, roles })
         navigate(from, { replace: true })
       } catch (error) {
         console.log(error)

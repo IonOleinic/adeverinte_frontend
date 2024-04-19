@@ -4,8 +4,11 @@ import StudentRow from '../StudentRow/StudentRow'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { Paginator } from 'primereact/paginator'
 import { toast } from 'react-toastify'
+import LoadingLayer from '../../LoadingLayer/LoadingLayer'
+import useLoading from '../../../hooks/useLoading'
 
 function ManageStudents() {
+  const { setIsLoading } = useLoading() // Use useLoading hook
   const axiosPrivate = useAxiosPrivate()
   const [students, setStudents] = useState([])
   const [filters, setFilters] = useState({
@@ -15,13 +18,15 @@ function ManageStudents() {
     studyYear: '',
   })
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(7)
+  const [rows, setRows] = useState(10)
 
   const getStudents = async () => {
     try {
+      setIsLoading(true)
       const response = await axiosPrivate.get('/students')
       setStudents(response.data)
       console.log(response.data)
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -168,10 +173,11 @@ function ManageStudents() {
             first={first}
             rows={rows}
             totalRecords={filteredStudents.length}
-            rowsPerPageOptions={[7, 10, 20]}
+            rowsPerPageOptions={[10, 20, 50]}
             onPageChange={onPageChange}
           />
         </div>
+        <LoadingLayer />
       </div>
     </div>
   )

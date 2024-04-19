@@ -3,23 +3,29 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import PendingRequestRow from '../PendingRequestRow/PendingRequestRow'
 import { LuRefreshCcw } from 'react-icons/lu'
 import { Paginator } from 'primereact/paginator'
+import { toast } from 'react-toastify'
+import useLoading from '../../../hooks/useLoading'
 import './PendingRequests.css'
+import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 
 function PendingRequests() {
   const axiosPrivate = useAxiosPrivate()
+  const { setIsLoading } = useLoading() // Use useLoading hook
   const [pendingRequests, setPendingRequests] = useState([])
   const [filters, setFilters] = useState({
     studentEmail: '',
     certificatePurpose: '',
   })
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(7)
+  const [rows, setRows] = useState(10)
 
   const getPendingRequests = useCallback(async () => {
     try {
+      setIsLoading(true)
       const response = await axiosPrivate.get('/pending-certificate-requests')
       setPendingRequests(response.data)
       console.log(response.data)
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -27,11 +33,13 @@ function PendingRequests() {
 
   const loadRequestsFromSpreadsheet = async () => {
     try {
+      setIsLoading(true)
       const response = await axiosPrivate.get(
         '/load-certificate-requests-from-spreadsheet'
       )
       setPendingRequests(response.data)
       console.log(response.data)
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -70,11 +78,21 @@ function PendingRequests() {
     }))
   }
 
+  useEffect(() => {
+    return () =>
+      setTimeout(() => {
+        toast.dismiss()
+      }, 2000)
+  }, [])
+
   return (
     <div className='pending-requests'>
       <div className='pending-requests-toolbar'>
-        <div className='pending-requests-toolbar-item refresh-requests-btn'>
-          <LuRefreshCcw size={19} onClick={loadRequestsFromSpreadsheet} />
+        <div
+          className='pending-requests-toolbar-item refresh-requests-btn'
+          onClick={loadRequestsFromSpreadsheet}
+        >
+          <LuRefreshCcw size={19} />
         </div>
         <div className='pending-requests-toolbar-item search-requests-by-email'>
           <label htmlFor='search-by-email'>Email:</label>
@@ -142,10 +160,11 @@ function PendingRequests() {
             first={first}
             rows={rows}
             totalRecords={filteredRequests.length}
-            rowsPerPageOptions={[7, 10, 20]}
+            rowsPerPageOptions={[10, 20, 50]}
             onPageChange={onPageChange}
           />
         </div>
+        <LoadingLayer />
       </div>
     </div>
   )

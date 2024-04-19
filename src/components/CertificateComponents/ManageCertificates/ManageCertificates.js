@@ -4,8 +4,11 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
 import { Paginator } from 'primereact/paginator'
 import './ManageCertificates.css'
+import useLoading from '../../../hooks/useLoading'
+import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 
 function ManageCertificates() {
+  const { setIsLoading } = useLoading() // Use useLoading hook
   const axiosPrivate = useAxiosPrivate()
   const [certificates, setCertificates] = useState([])
   const [filters, setFilters] = useState({
@@ -14,13 +17,15 @@ function ManageCertificates() {
     printed: '',
   })
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(7)
+  const [rows, setRows] = useState(10)
 
   const getCertificates = async () => {
     try {
+      setIsLoading(true)
       const response = await axiosPrivate.get('/certificates')
       setCertificates(response.data)
       console.log(response.data)
+      setIsLoading(false)
     } catch (error) {
       console.log(error)
     }
@@ -159,10 +164,11 @@ function ManageCertificates() {
             first={first}
             rows={rows}
             totalRecords={filteredCertificates.length}
-            rowsPerPageOptions={[7, 10, 20]}
+            rowsPerPageOptions={[10, 20, 50]}
             onPageChange={onPageChange}
           />
         </div>
+        <LoadingLayer />
       </div>
     </div>
   )

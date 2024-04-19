@@ -149,6 +149,8 @@ function PendingRequestRow({ request, getPendingRequests }) {
       getPendingRequests()
     } catch (error) {
       console.error(error)
+      setBtnAcceptDisabled(false)
+      setBtnAcceptTooltip('Acceptă')
       if (error.response.status === 500) {
         toast.error(
           `Eroare. Setati numar NR de la optiuni si apoi reincercati.`,
@@ -269,12 +271,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
           </form>
         </td>
         <td className='pending-request-row-item pending-request-row-buttons'>
-          <Tooltip
-            id={`tooltip-btn-accept-${request.id}`}
-            // style={{
-            //   display: !btnAcceptDisabled ? 'none' : 'revert',
-            // }}
-          />
+          <Tooltip id={`tooltip-btn-accept-${request.id}`} />
           <button
             data-tooltip-id={`tooltip-btn-accept-${request.id}`}
             data-tooltip-content={btnAcceptTooltip}
@@ -304,7 +301,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
       <Dialog
         header='Motiv respingere cerere'
         visible={rejectDialogVisible}
-        style={{ minWidth: '500px', minHeight: '250px' }}
+        className='reject-request-dialog'
         onHide={() => {
           setRejectDialogVisible(false)
           toast.dismiss()

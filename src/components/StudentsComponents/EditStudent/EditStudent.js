@@ -142,7 +142,10 @@ function EditStudent() {
                   placeholder='Nume inițiala-tată prenume'
                   required
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  onChange={(e) => {
+                    setFullName(e.target.value)
+                    setDisabledEditBtn(false)
+                  }}
                 />
                 <label htmlFor='floatingStudentName'>Nume complet</label>
               </div>

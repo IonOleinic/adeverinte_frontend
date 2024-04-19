@@ -11,6 +11,7 @@ function useRefreshToken() {
         ...prevAuth,
         roles: response.data.roles,
         accessToken: response.data.accessToken,
+        email: response.data.email,
       }))
       return response.data.accessToken
     } catch (error) {

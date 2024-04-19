@@ -54,6 +54,7 @@
   align-items: center;
   width: 100%;
   height: 90%;
+
   overflow-y: auto; /* Enable vertical scrolling */
 }
 .manage-certificates-paginator {

@@ -4,8 +4,9 @@
   border: 1px solid var(--light-grey);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 1rem;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 .processed-request-row:nth-child(odd) {
   background-color: var(--table-row-odd-color);
@@ -15,6 +16,7 @@
 }
 .processed-request-row-item {
   width: 150px;
+  flex-grow: 1;
 }
 .processed-request-row-date {
   width: 130px;

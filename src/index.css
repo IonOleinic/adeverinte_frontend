@@ -4,8 +4,9 @@
   --dark-blue: rgb(0, 0, 66);
   --hover-blue: rgb(35, 68, 255);
   --active-blue: rgb(35, 68, 255);
+  --hover-light-blue: #75bee9;
+  --active-light-blue: #75bee9;
   --hover-red: #dc1428;
-  /* --table-row-odd-color: #eeeeee; */
   --table-row-odd-color: #a6cbfe29;
   --light-red: #dc3545;
   --very-light-red: #fb4f60;
@@ -54,7 +55,7 @@ h6 {
 .page-container {
   width: 98%;
   /* NOTE: if you want height to be scalabe, delete height, and set min-height: 80vh */
-  height: 80vh;
+  height: 85vh;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -62,7 +63,12 @@ h6 {
   padding: 0.75rem;
   box-shadow: var(--basic-box-shadow); /* Basic grey box-shadow */
 }
-
+.page-container > :last-child {
+  flex-grow: 1;
+}
+table {
+  border: 1px solid var(--light-grey);
+}
 /* table styles */
 table td > p {
   text-align: left;

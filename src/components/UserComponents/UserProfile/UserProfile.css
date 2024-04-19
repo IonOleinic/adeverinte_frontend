@@ -1,0 +1,98 @@
+.user-profile-container {
+  min-width: 200px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  gap: 0.3rem;
+}
+.user-profile-top {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.user-profile-img {
+  width: 50px;
+  color: white;
+}
+
+.user-profile-info {
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-profile-name {
+  font-size: 1.1rem;
+}
+
+.user-profile-role {
+  font-size: 0.9rem;
+}
+
+.user-profile-menu {
+  width: 70%;
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  transform: translateY(100%);
+  opacity: 1;
+  display: flex;
+  background-color: white;
+  box-shadow: var(--basic-box-shadow);
+  z-index: 99;
+  padding: 0.3rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.user-profile-menu-hidden {
+  opacity: 0;
+  transform: translateY(70%);
+  z-index: -1;
+}
+
+.user-profile-menu::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  border-radius: 3px;
+  left: 25%;
+  transform: rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  z-index: -1;
+}
+
+.user-profile-menu-list {
+  width: 100%;
+  list-style: none;
+}
+
+.user-profile-menu-list-item {
+  border-bottom: 1px solid var(--light-grey);
+  width: 100%;
+  text-decoration: none;
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease-out;
+}
+
+.user-profile-menu-list-item:hover {
+  padding-left: 1rem;
+  color: var(--hover-blue);
+  cursor: pointer;
+}
+
+.singn-out-btn {
+  border: none;
+  color: var(--light-red);
+}
+.singn-out-btn:hover {
+  color: var(--hover-red);
+}

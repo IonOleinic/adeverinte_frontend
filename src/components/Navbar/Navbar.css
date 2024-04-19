@@ -15,28 +15,43 @@
   text-decoration: none;
 }
 
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  padding: 0.5rem;
+  gap: 1rem;
+}
+
+.nav-link.active {
+  color: var(--active-light-blue);
+}
+.nav-item-bottom-line {
+  transition: all 0.2s ease-in-out;
+  width: 0;
+  opacity: 0;
+  height: 2px;
+  background-color: var(--active-light-blue);
+}
+
+.nav-link.active .nav-item-bottom-line {
+  width: 100%;
+  opacity: 1;
+}
+
+.nav-link:hover {
+  color: var(--hover-light-blue);
+}
+
 .nav-item {
-  /* transition: all 0.1s ease-in-out; */
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: white;
-  padding: 0.5rem;
-  padding-bottom: 1rem;
-}
-
-.nav-link.active {
-  color: var(--active-blue);
-  border-bottom: 2px solid var(--active-blue);
-}
-.nav-link:hover {
-  color: var(--hover-blue);
 }
 
 .nav-logo {

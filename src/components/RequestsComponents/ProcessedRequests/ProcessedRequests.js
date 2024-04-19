@@ -3,9 +3,12 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import './ProcessedRequests.css'
 import { Paginator } from 'primereact/paginator'
 import ProcessedRequestRow from '../ProcessedRequestRow/ProcessedRequestRow'
+import LoadingLayer from '../../LoadingLayer/LoadingLayer'
+import useLoading from '../../../hooks/useLoading'
 
 function ProcessedRequests() {
   const axiosPrivate = useAxiosPrivate()
+  const { setIsLoading } = useLoading() // Use useLoading hook
   const [processedRequests, setProcessedRequests] = useState([])
   const [filters, setFilters] = useState({
     studentEmail: '',
@@ -13,7 +16,7 @@ function ProcessedRequests() {
     accepted: '',
   })
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(7)
+  const [rows, setRows] = useState(10)
 
   const deleteRequest = useCallback(async (id) => {
     try {
@@ -26,9 +29,11 @@ function ProcessedRequests() {
 
   const getProcessedRequests = async () => {
     try {
+      setIsLoading(true)
       const response = await axiosPrivate.get('/processed-certificate-requests')
       setProcessedRequests(response.data)
       console.log(response.data)
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -134,6 +139,9 @@ function ProcessedRequests() {
                 <th className='processed-request-row-item processed-request-row-rejected-reason'>
                   Motiv respingere
                 </th>
+                <th className='processed-request-row-item processed-request-row-buttons'>
+                  Actiuni
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -152,10 +160,11 @@ function ProcessedRequests() {
             first={first}
             rows={rows}
             totalRecords={filteredRequests.length}
-            rowsPerPageOptions={[7, 10, 20]}
+            rowsPerPageOptions={[10, 20, 50]}
             onPageChange={onPageChange}
           />
         </div>
+        <LoadingLayer />
       </div>
     </div>
   )
