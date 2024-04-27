@@ -5,9 +5,13 @@ import AddStudent from '../../components/StudentsComponents/AddStudent/AddStuden
 import EditStudent from '../../components/StudentsComponents/EditStudent/EditStudent'
 import UploadStudents from '../../components/StudentsComponents/UploadStudents/UploadStudents'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import useRoles from '../../hooks/useRoles'
+import NotFound from '../../components/NotFound/NotFound'
+import RequireAuth from '../../components/Auth/RequireAuth'
 import './Students.css'
 
 function Students() {
+  const { roles } = useRoles()
   return (
     <>
       <StudentsNavbar />
@@ -20,7 +24,10 @@ function Students() {
             element={<EditStudent />}
           />
           <Route path='add-student' element={<AddStudent />} />
-          <Route path='upload-students' element={<UploadStudents />} />
+          <Route element={<RequireAuth allowedRoles={[roles.Admin]} />}>
+            <Route path='upload-students' element={<UploadStudents />} />
+          </Route>
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </>

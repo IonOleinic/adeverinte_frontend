@@ -47,14 +47,14 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 .processed-requests-table-container {
   display: flex;
   align-items: center;
   width: 100%;
   height: 90%;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow: hidden;
 }
 .processed-requests-paginator {
   position: absolute;
@@ -71,6 +71,7 @@
   display: flex;
   flex-direction: column;
   position: relative; /* Required for sticky thead */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 .processed-requests-table thead {
   position: sticky;

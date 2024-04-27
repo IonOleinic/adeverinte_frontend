@@ -1,0 +1,36 @@
+.failed-student-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+.failed-student-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.failed-student-row td {
+  text-align: left;
+}
+.failed-student-row-item {
+  width: 150px;
+  flex-grow: 1;
+}
+.failed-student-row-excel-index {
+  width: 80px;
+}
+.failed-student-row-fullname {
+  width: 180px;
+}
+.failed-student-row-email {
+  width: 280px;
+  word-break: break-all;
+}
+.failed-student-row-study-domain {
+  width: 250px;
+}
+.failed-student-row-study-year {
+  width: 50px;
+}

@@ -9,7 +9,7 @@ import AppLayout from './components/Layouts/AppLayout'
 import PrivatePagesLayout from './components/Layouts/PrivatePagesLayout'
 import RequireAuth from './components/Auth/RequireAuth'
 import PersistLogin from './components/Auth/PersistLogin'
-import NotFound from './pages/NotFound/NotFound'
+import NotFound from './components/NotFound/NotFound'
 import useRoles from './hooks/useRoles'
 
 function App() {

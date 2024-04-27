@@ -1,4 +1,4 @@
-.unauthorized-container {
+.notfound-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,7 +6,7 @@
   height: 100%;
 }
 
-.unauthorized {
+.notfound {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -14,7 +14,12 @@
   justify-content: center;
 }
 
-.unauthorized p {
+.notfound > div {
+  font-size: 6rem;
+  font-weight: 700;
+}
+
+.notfound p {
   font-size: 1.4rem;
   font-weight: 500;
 }

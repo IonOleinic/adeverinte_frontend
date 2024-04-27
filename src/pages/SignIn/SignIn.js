@@ -1,15 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { FaGoogle } from 'react-icons/fa'
+import { useGoogleLogin } from '@react-oauth/google'
+import { GoogleLogin } from '@react-oauth/google'
 import SiglaUSVNume from './images/usv-sigla-nume.jpg'
 import { toast } from 'react-toastify'
 import { useNavigate, useLocation } from 'react-router-dom'
 import useAxios from '../../hooks/useAxios'
 import useAuth from '../../hooks/useAuth'
+import useLogout from '../../hooks/useLogout'
 import './SignIn.css'
 
 function SignIn() {
   const axios = useAxios()
-  const { setAuth, persist, setPersist } = useAuth()
+  const logout = useLogout()
+  const { auth, setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || { pathname: '/requests' }
@@ -18,6 +22,55 @@ function SignIn() {
   const [password, setPassword] = useState('')
   const [invalidCredentialsBool, setInvalidCredentialsBool] = useState(false)
   const [disabledSignInBtn, setDisabledSignInBtn] = useState(false)
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async ({ code }) => {
+      await googleLogin(code)
+    },
+    onError: () => {
+      toast.error('Eroare Logare!', {
+        theme: 'colored',
+        autoClose: false,
+      })
+    },
+    flow: 'auth-code',
+  })
+
+  const googleLogin = async (code) => {
+    try {
+      const response = await axios.post('/auth/google', {
+        code,
+      })
+      const accessToken = response.data.accessToken
+      const roles = response.data.roles
+      const email = response.data.email
+      setAuth({ email, accessToken, roles })
+      navigate(from, { replace: true })
+    } catch (error) {
+      console.log(error)
+      if (!error.response) {
+        toast.error('Eroare. Serverul nu raspunde!', {
+          theme: 'colored',
+          autoClose: false,
+        })
+      } else if (error.response.status === 401) {
+        toast.error('Eroare logare. Datele introduse sunt incorecte!', {
+          theme: 'colored',
+          autoClose: false,
+        })
+      } else if (error.response.status === 500) {
+        toast.error('Eroare server!', {
+          theme: 'colored',
+          autoClose: false,
+        })
+      } else {
+        toast.error('Eroare logare!', {
+          theme: 'colored',
+          autoClose: false,
+        })
+      }
+    }
+  }
 
   const login = async (e) => {
     setDisabledSignInBtn(true)
@@ -36,7 +89,6 @@ function SignIn() {
       try {
         const response = await axios.post('/login', { email, password })
         form.classList.add('was-validated')
-        console.log(response.data)
         const accessToken = response.data.accessToken
         const roles = response.data.roles
         setAuth({ email, accessToken, roles })
@@ -164,9 +216,18 @@ function SignIn() {
                     <button
                       className='btn btn-google btn-signin text-uppercase fw-bold'
                       type='button'
+                      onClick={handleGoogleLogin}
                     >
                       <FaGoogle /> <p>Autentificare cu Google</p>
                     </button>
+                    {/* <GoogleLogin
+                      onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse)
+                      }}
+                      onError={() => {
+                        console.log('Login Failed')
+                      }}
+                    /> */}
                   </div>
                 </form>
               </div>

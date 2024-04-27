@@ -19,6 +19,7 @@ function UserProfile() {
   const [user, setUser] = useState({})
   const { roles } = useRoles()
   const [userMainRole, setUserMainRole] = useState('User')
+  const [profileImage, setProfileImage] = useState(userAvatar)
   const [userMenuVisible, setUserMenuVisible] = useState(false)
   const userMenuRef = useRef()
 
@@ -45,6 +46,14 @@ function UserProfile() {
     }
   }, [roles, user.roles])
 
+  useEffect(() => {
+    if (user.profileImage) {
+      setProfileImage(user.profileImage)
+    } else {
+      setProfileImage(userAvatar)
+    }
+  }, [user.profileImage])
+
   return (
     <div className='user-profile-container'>
       <div
@@ -52,7 +61,11 @@ function UserProfile() {
         onClick={(e) => setUserMenuVisible((prev) => !prev)}
         ref={userMenuRef}
       >
-        <img src={userAvatar} alt='user avatar' className='user-profile-img' />
+        <img
+          src={profileImage}
+          alt='user avatar'
+          className='user-profile-img'
+        />
         <div className='user-profile-info'>
           <h5 className='user-profile-name'>{`${user.firstName} ${user.lastName}`}</h5>
           <p className='user-profile-role'>{userMainRole}</p>

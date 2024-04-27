@@ -13,9 +13,11 @@
   align-items: center;
   cursor: pointer;
   user-select: none;
+  gap: 0.5rem;
 }
 .user-profile-img {
-  width: 50px;
+  border-radius: 50%;
+  width: 40px;
   color: white;
 }
 
@@ -36,6 +38,7 @@
 .user-profile-menu {
   width: 70%;
   position: absolute;
+  visibility: visible;
   bottom: 0;
   left: 25%;
   transform: translateY(100%);
@@ -52,6 +55,7 @@
   opacity: 0;
   transform: translateY(70%);
   z-index: -1;
+  visibility: hidden;
 }
 
 .user-profile-menu::before {

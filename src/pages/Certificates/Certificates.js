@@ -1,11 +1,11 @@
-import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import './Certificates.css'
 import CertificateNavbar from '../../components/CertificateComponents/CertificateNavbar/CertificateNavbar'
 import CertificateOptions from '../../components/CertificateComponents/CertificateOptions/CertificateOptions'
 import AddCertificate from '../../components/CertificateComponents/AddCertificate/AddCertificate'
 import ManageCertificates from '../../components/CertificateComponents/ManageCertificates/ManageCertificates'
 import EditCertificate from '../../components/CertificateComponents/EditCertificate/EditCertificate'
+import NotFound from '../../components/NotFound/NotFound'
+import './Certificates.css'
 
 function Certificates() {
   return (
@@ -21,6 +21,7 @@ function Certificates() {
           />
           <Route path='add-certificate' element={<AddCertificate />} />
           <Route path='certificate-options' element={<CertificateOptions />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </div>
     </>

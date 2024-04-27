@@ -8,11 +8,7 @@ function LoadingLayer() {
   const spinnerColor = '#2344ff'
 
   return (
-    <div
-      className={
-        isLoading ? 'loadind-layer' : 'loadind-layer loadind-layer-hidden'
-      }
-    >
+    <div className={isLoading ? 'loadind-layer' : 'loadind-layer-hidden'}>
       <div className='loading-spinner'>
         <ClipLoader
           color={spinnerColor}

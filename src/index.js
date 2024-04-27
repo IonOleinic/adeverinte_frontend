@@ -11,15 +11,18 @@ import App from './App'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider'
 import { LoadingProvider } from './context/LoadingProvider'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <LoadingProvider>
-          <App />
-        </LoadingProvider>
+        <GoogleOAuthProvider clientId='859328509642-9cv8bmn7fcf7adj24up9dg8e9a6t033f.apps.googleusercontent.com'>
+          <LoadingProvider>
+            <App />
+          </LoadingProvider>
+        </GoogleOAuthProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

@@ -58,9 +58,6 @@
   width: 90px;
   margin-left: 3rem;
 }
-.nav-logo:hover {
-  cursor: pointer;
-}
 
 .signin-btn {
   font-size: 1.1rem;

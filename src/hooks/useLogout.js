@@ -10,6 +10,7 @@ function useLogout() {
         ...prevAuth,
         roles: [],
         accessToken: '',
+        email: '',
       }))
     } catch (error) {
       console.log(error)

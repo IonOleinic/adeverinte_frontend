@@ -1,4 +1,3 @@
-import React from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { CiTrash } from 'react-icons/ci'
 import { useNavigate } from 'react-router-dom'
