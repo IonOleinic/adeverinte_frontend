@@ -1,0 +1,67 @@
+.user-row {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--light-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+.user-row:nth-child(odd) {
+  background-color: var(--table-row-odd-color);
+}
+.user-row td {
+  text-align: left;
+}
+
+.user-row-item {
+  width: 150px;
+  flex-grow: 1;
+}
+.user-row-avatar {
+  width: 60px;
+}
+.user-row-avatar img {
+  width: 30px;
+  height: 30px;
+}
+.user-row-fullname {
+  width: 200px;
+}
+.user-row-email {
+  width: 280px;
+  word-break: break-all;
+}
+
+.user-row-buttons {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.3rem;
+  width: 80px;
+}
+.user-row-button {
+  border: none;
+  background-color: transparent;
+}
+.user-row-edit {
+  color: var(--very-light-blue);
+}
+.user-row-edit:hover {
+  color: var(--hover-blue);
+}
+.user-row-delete {
+  color: var(--very-light-red);
+}
+.user-row-delete:hover {
+  color: var(--hover-red);
+}
+
+.user-row-delete:disabled {
+  color: var(--light-grey);
+}
+.user-row-edit:disabled {
+  color: var(--light-grey);
+}

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
-
 import './EditStudent.css'
 
 function EditStudent() {

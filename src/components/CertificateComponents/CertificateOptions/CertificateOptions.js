@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { IoInformationCircleOutline } from 'react-icons/io5'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
+import useRoles from '../../../hooks/useRoles'
+import useAuth from '../../../hooks/useAuth'
 import './CertificateOptions.css'
 
 function CertificateOptions() {
+  const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
+  const { roles } = useRoles()
   const [NR, setNR] = useState('')
   const [mask, setMask] = useState('')
   const [invalidMaskBool, setinvalidMaskBool] = useState(false)
@@ -73,6 +77,10 @@ function CertificateOptions() {
     }
   }, [])
 
+  useEffect(() => {
+    console.log(auth)
+  }, [auth])
+
   return (
     <div className='certificate-options'>
       <div className='certificate-options-info'>
@@ -131,6 +139,7 @@ function CertificateOptions() {
                   placeholder='NR.A.i/[data]'
                   required
                   value={mask}
+                  disabled={!auth.roles?.includes(roles.Admin)}
                   onChange={(e) => {
                     setMask(e.target.value)
                     setDisabledSaveBtn(false)

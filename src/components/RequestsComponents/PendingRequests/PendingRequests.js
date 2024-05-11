@@ -125,7 +125,7 @@ function PendingRequests() {
             <thead>
               <tr className='pending-request-row pending-request-row-header'>
                 <th className='pending-request-row-item pending-request-row-date'>
-                  Data
+                  Data creării
                 </th>
                 <th className='pending-request-row-item pending-request-row-email'>
                   Email student

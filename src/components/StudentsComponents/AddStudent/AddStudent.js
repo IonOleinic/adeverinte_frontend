@@ -216,10 +216,10 @@ function AddStudent() {
                   }}
                 >
                   <option value={''}>Selecteaza...</option>
-                  <option value='licenta'>Licenta</option>
+                  <option value='licență'>Licență</option>
                   <option value='masterat'>Masterat</option>
                   <option value='studii postuniversitare'>Postuniv.</option>
-                  <option value='conversie profesionala'>Conv. prof.</option>
+                  <option value='conversie profesională'>Conv. prof.</option>
                 </select>
                 <label htmlFor='floatingStudentCycle'>Ciclu de studii</label>
               </div>

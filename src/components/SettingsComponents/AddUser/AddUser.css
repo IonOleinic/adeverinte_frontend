@@ -1,0 +1,35 @@
+.user-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}
+.user-card {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.user-card-body {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.div-btn-add-user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.btn-add-user {
+  width: 40%;
+  min-width: 200px;
+}
+
+.user-form-invalid-feedback {
+  display: block !important;
+}
+.user-form-valid-feedback {
+  display: none !important;
+}

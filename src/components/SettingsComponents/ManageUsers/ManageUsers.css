@@ -1,0 +1,92 @@
+.manage-users {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.manage-users-toolbar {
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid var(--light-grey);
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  padding: 0 2rem;
+  gap: 2rem;
+}
+.manage-users-toolbar-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.manage-users-toolbar-item select {
+  appearance: auto !important;
+}
+.manage-users-toolbar-item input {
+  width: 220px;
+}
+.search-users-by-study-cycle select {
+  width: 130px;
+}
+.search-users-by-study-year select {
+  width: 70px;
+}
+.manage-users-toolbar-item label {
+  word-break: keep-all;
+  font-weight: 500;
+}
+.manage-users-list {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.manage-users-table-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 90%;
+  overflow: hidden;
+}
+.manage-users-paginator {
+  position: absolute;
+  bottom: 0.2rem;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.manage-users-table {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Required for sticky thead */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+.manage-users-table thead {
+  position: sticky;
+  top: 0; /* Stick the thead to the top */
+  z-index: 1; /* Ensure thead is above tbody */
+}
+
+.manage-users-table th {
+  text-align: left;
+}
+
+.user-row-header {
+  background-color: white !important;
+}
+
+.btn-toolbar-add-user {
+  padding: 0.4rem 0.6rem;
+}

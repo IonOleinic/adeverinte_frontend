@@ -23,7 +23,7 @@ function AddCertificate() {
   const [serverErrorMessage, setServerErrorMessage] = useState('')
   const [disabledAddBtn, setDisabledAddBtn] = useState(true)
 
-  const AddCertificate = async (e) => {
+  const addCertificate = async (e) => {
     e.preventDefault()
     setInvalidStudentEmailBool(false)
     setInvalidCertificatePurposeBool(false)
@@ -133,7 +133,7 @@ function AddCertificate() {
               className='certificate-form needs-validation'
               id='add-certificate-form'
               noValidate
-              onSubmit={AddCertificate}
+              onSubmit={addCertificate}
             >
               <div className='form-floating mb-3'>
                 <input
@@ -212,7 +212,7 @@ function AddCertificate() {
                   disabled={disabledAddBtn}
                   className='btn btn-primary fw-bold btn-add-certificate'
                   type='submit'
-                  onSubmit={AddCertificate}
+                  onSubmit={addCertificate}
                 >
                   Adaugă
                 </button>

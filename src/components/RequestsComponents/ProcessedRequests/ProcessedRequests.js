@@ -122,7 +122,7 @@ function ProcessedRequests() {
             <thead>
               <tr className='processed-request-row processed-request-row-header'>
                 <th className='processed-request-row-item processed-request-row-date'>
-                  Data
+                  Data creării
                 </th>
                 <th className='processed-request-row-item processed-request-row-email'>
                   Email student

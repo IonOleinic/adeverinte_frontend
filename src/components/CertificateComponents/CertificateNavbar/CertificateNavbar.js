@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { GrDocumentConfig } from 'react-icons/gr'
 import { AiOutlineFileAdd } from 'react-icons/ai'

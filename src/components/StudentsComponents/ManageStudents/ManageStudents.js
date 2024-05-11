@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import './ManageStudents.css'
 import StudentRow from '../StudentRow/StudentRow'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -6,6 +6,9 @@ import { Paginator } from 'primereact/paginator'
 import { toast } from 'react-toastify'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 import useLoading from '../../../hooks/useLoading'
+
+const removeAccents = (str) =>
+  str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
 function ManageStudents() {
   const { setIsLoading } = useLoading() // Use useLoading hook
@@ -50,11 +53,11 @@ function ManageStudents() {
     return students.filter((student) => {
       return (
         student.email.toLowerCase().includes(filters.email.toLowerCase()) &&
-        student.studyProgram
+        removeAccents(student.studyProgram)
           .toLowerCase()
           .includes(filters.studyProgram.toLowerCase()) &&
         (filters.studyCycle
-          ? student.studyCycle === filters.studyCycle
+          ? removeAccents(student.studyCycle) === filters.studyCycle
           : true) &&
         (filters.studyYear
           ? student.studyYear === parseInt(filters.studyYear)
@@ -113,7 +116,7 @@ function ManageStudents() {
             onChange={(e) => handleFilterChange('studyCycle', e.target.value)}
           >
             <option value={''}>*</option>
-            <option value={'licenta'}>Licenta</option>
+            <option value={'licenta'}>Licență</option>
             <option value={'masterat'}>Masterat</option>
             <option value={'studii postuniversitare'}>Postuniv.</option>
             <option value={'conversie profesionala'}>Conv. prof.</option>

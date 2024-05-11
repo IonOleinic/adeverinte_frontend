@@ -2,6 +2,8 @@ import * as XLSX from 'xlsx'
 import { IoWarningSharp } from 'react-icons/io5'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { ProgressBar } from 'primereact/progressbar'
+import { confirmDialog } from 'primereact/confirmdialog'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useLoading from '../../../hooks/useLoading'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
@@ -13,8 +15,10 @@ function UploadStudents() {
   const { setIsLoading } = useLoading()
   const [students, setStudents] = useState([])
   const [failedStudents, setFailedStudents] = useState([])
-  const [disabledUploadBtn, setDisabledUploadBtn] = useState(true)
   const [successStudentsCount, setSuccessStudentsCount] = useState(0)
+  const [processedStudentsCount, setProcessedStudentsCount] = useState(0)
+  const [processedStudentsPercent, setProcessedStudentsPercent] = useState(0)
+  const [disabledUploadBtn, setDisabledUploadBtn] = useState(true)
   const [fileProcessed, setFileProcessed] = useState(false)
 
   const uploadStudents = async () => {
@@ -22,6 +26,8 @@ function UploadStudents() {
     console.log(students.length)
     setDisabledUploadBtn(true)
     setSuccessStudentsCount(0)
+    setProcessedStudentsCount(0)
+    setProcessedStudentsPercent(0)
     setFailedStudents([])
     if (students.length === 0) {
       toast.error(
@@ -57,6 +63,7 @@ function UploadStudents() {
           } else {
             setSuccessStudentsCount((prev) => prev + chunk.length)
           }
+          setProcessedStudentsCount((prev) => prev + chunk.length)
 
           console.log('Chunk uploaded successfully')
         } catch (error) {
@@ -64,7 +71,7 @@ function UploadStudents() {
         }
       }
       if (failedStudentsCount > 0) {
-        toast.info(
+        toast.warning(
           `Au fost încărcați cu succes ${
             students.length - failedStudentsCount
           } studenți. A apărut o eroare la încărcarea a ${failedStudentsCount} studenți.`,
@@ -103,6 +110,8 @@ function UploadStudents() {
     }
     setFileProcessed(false)
     setSuccessStudentsCount(0)
+    setProcessedStudentsPercent(0)
+    setProcessedStudentsCount(0)
     setDisabledUploadBtn(false)
     const file = e.target.files[0]
     const reader = new FileReader()
@@ -146,6 +155,12 @@ function UploadStudents() {
     }
   }, [])
 
+  useEffect(() => {
+    setProcessedStudentsPercent(
+      Math.floor((processedStudentsCount * 100) / students.length)
+    )
+  }, [processedStudentsCount])
+
   return (
     <div className='upload-students'>
       <div className='upload-students-top'>
@@ -176,7 +191,21 @@ function UploadStudents() {
                 disabled={disabledUploadBtn}
                 type='button'
                 className='btn btn-primary fw-bold btn-upload-students'
-                onClick={uploadStudents}
+                onClick={() => {
+                  confirmDialog({
+                    message: `Atenție, lista curentă cu studenti va fi resetată? Doriti să continuați?`,
+                    header: 'Confimare încărcare studenți',
+                    icon: 'pi pi-upload',
+                    defaultFocus: 'reject',
+                    acceptClassName: 'p-button-danger',
+                    acceptLabel: 'Da',
+                    rejectLabel: 'Nu',
+                    accept: () => {
+                      uploadStudents()
+                    },
+                    reject: () => {},
+                  })
+                }}
               >
                 Încarcă fișierul
               </button>
@@ -218,6 +247,14 @@ function UploadStudents() {
           </div>
         </div>
       </div>
+      <ProgressBar
+        value={processedStudentsPercent}
+        className={
+          processedStudentsPercent > 0
+            ? 'upload-students-progress-bar'
+            : 'upload-students-progress-bar-hidden'
+        }
+      ></ProgressBar>
       <div
         className={
           failedStudents.length > 0
@@ -225,7 +262,7 @@ function UploadStudents() {
             : 'failed-students-table-container-hidden'
         }
       >
-        <h3>Studenți neîncarcați:</h3>
+        <h3>{`Studenți neîncarcați (${failedStudents.length}) :`}</h3>
         <table className='failed-students-table'>
           <thead>
             <tr className='failed-student-row failed-student-row-header'>

@@ -1,0 +1,10 @@
+.div-btn-edit-user {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.div-btn-edit-user button {
+  width: 150px;
+}

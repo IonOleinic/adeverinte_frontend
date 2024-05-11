@@ -7,6 +7,7 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { Dialog } from 'primereact/dialog'
 import { Tooltip } from 'react-tooltip'
 import { useNavigate } from 'react-router-dom'
+import useAuth from '../../../hooks/useAuth'
 import './PendingRequestRow.css'
 
 const getFormatedDate = (date) => {
@@ -32,8 +33,10 @@ const addZero = (number) => {
 }
 
 function PendingRequestRow({ request, getPendingRequests }) {
+  const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
+  const [user, setUser] = useState({})
   const [student, setStudent] = useState({})
   const [certificatePurpose, setCertificatePurpose] = useState(
     request.certificatePurpose
@@ -97,6 +100,18 @@ function PendingRequestRow({ request, getPendingRequests }) {
   }
 
   useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await axiosPrivate.get(`/user?email=${auth.email}`)
+        setUser(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getUser()
+  }, [auth.email])
+
+  useEffect(() => {
     getStudent()
   }, [request.studentEmail])
 
@@ -136,7 +151,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
     }
     try {
       request.accepted = true
-      request.handledBy = 'admin'
+      request.handledBy = user ? `${user.lastName} ${user.firstName}` : 'Admin'
       request.certificatePurpose = certificatePurpose
       await axiosPrivate.post('/certificate', {
         studentEmail: request.studentEmail,
@@ -188,10 +203,11 @@ function PendingRequestRow({ request, getPendingRequests }) {
     try {
       request.accepted = false
       request.rejectedReason = rejectedReason
-      request.handledBy = 'admin'
+      request.handledBy = user ? `${user.lastName} ${user.firstName}` : 'Admin'
       await axiosPrivate.put(`/certificate-request/${request.id}`, request)
       setRejectDialogVisible(false)
       getPendingRequests()
+      toast.info('Cererea a fost respinsă')
     } catch (error) {
       console.error(error)
     }
@@ -242,7 +258,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
                   : 'form-control pending-request-row-purpose-input'
               }
               value={certificatePurpose}
-              onFocus={() => setBtnSavePurposeVisible(true)}
+              // onFocus={() => setBtnSavePurposeVisible(true)}
               onBlur={() => {
                 setTimeout(() => {
                   setBtnSavePurposeVisible(false)
@@ -250,6 +266,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
                 }, 150)
               }}
               onChange={(e) => {
+                setBtnSavePurposeVisible(true)
                 setCertificatePurpose(e.target.value)
                 setInvalidCertificatePurposeBool(false)
                 setBtnSavePurposeVisible(true)

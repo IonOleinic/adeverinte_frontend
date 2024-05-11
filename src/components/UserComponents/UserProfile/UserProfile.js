@@ -36,13 +36,13 @@ function UserProfile() {
       }
     }
     getUser()
-  }, [auth.email])
+  }, [auth.email, , auth.lastName, auth.firstName])
 
   useEffect(() => {
     if (user.roles?.includes(roles.Admin)) {
       setUserMainRole('Admin')
     } else if (user.roles?.includes(roles.Secretar)) {
-      setUserMainRole('Secretar')
+      setUserMainRole('Secretar(ă)')
     }
   }, [roles, user.roles])
 
@@ -67,7 +67,7 @@ function UserProfile() {
           className='user-profile-img'
         />
         <div className='user-profile-info'>
-          <h5 className='user-profile-name'>{`${user.firstName} ${user.lastName}`}</h5>
+          <h5 className='user-profile-name'>{`${user.lastName} ${user.firstName}`}</h5>
           <p className='user-profile-role'>{userMainRole}</p>
         </div>
       </div>
