@@ -1,4 +1,3 @@
-import React from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { CiTrash } from 'react-icons/ci'
 import { IoPrintOutline } from 'react-icons/io5'
@@ -7,10 +6,34 @@ import { Tooltip } from 'react-tooltip'
 import { confirmDialog } from 'primereact/confirmdialog'
 import './CertificateRow.css'
 
-function CertificateRow({ certificate, deleteCertificate }) {
+function CertificateRow({
+  certificate,
+  deleteCertificate,
+  printCertificate,
+  selectedCertificates,
+  setSelectedCertificates,
+  index,
+}) {
   const navigate = useNavigate()
+
   return (
     <tr className='certificate-row'>
+      <td className='certificate-row-item certificate-row-checkbox'>
+        <input
+          className='form-check-input'
+          type='checkbox'
+          value=''
+          checked={selectedCertificates[index] || false}
+          id='flexCheckDefault'
+          onChange={(e) => {
+            setSelectedCertificates((prev) => {
+              const newSelected = [...prev]
+              newSelected[index] = e.target.checked
+              return newSelected
+            })
+          }}
+        />
+      </td>
       <td className='certificate-row-item certificate-row-registration-nr'>
         <p>{certificate.registrationNr}</p>
       </td>
@@ -23,7 +46,13 @@ function CertificateRow({ certificate, deleteCertificate }) {
       <td className='certificate-row-item certificate-row-purpose'>
         <p>{certificate.certificatePurpose}</p>
       </td>
-      <td className='certificate-row-item certificate-row-printed'>
+      <td
+        className={
+          certificate.printed
+            ? 'certificate-row-item certificate-row-printed certificate-row-printed-green'
+            : 'certificate-row-item certificate-row-printed certificate-row-printed-red'
+        }
+      >
         <p>{certificate.printed ? 'Da' : 'Nu'}</p>
       </td>
       <td className='certificate-row-item certificate-row-buttons'>
@@ -34,7 +63,7 @@ function CertificateRow({ certificate, deleteCertificate }) {
           data-tooltip-place='left'
           className='certificate-row-button certificate-row-print'
           onClick={() => {
-            //
+            printCertificate([certificate])
           }}
         >
           <IoPrintOutline size={23} />

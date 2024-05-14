@@ -156,6 +156,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
       await axiosPrivate.post('/certificate', {
         studentEmail: request.studentEmail,
         certificatePurpose: request.certificatePurpose,
+        date: request.date,
       })
       await axiosPrivate.put(`/certificate-request/${request.id}`, request)
       toast.success(

@@ -41,6 +41,10 @@
   word-break: keep-all;
   font-weight: 500;
 }
+.btn-print-selected-certificates {
+  display: flex;
+  gap: 0.2rem;
+}
 .manage-certificates-list {
   display: flex;
   position: relative;
