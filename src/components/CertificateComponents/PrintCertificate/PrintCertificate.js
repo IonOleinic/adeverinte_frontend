@@ -66,7 +66,10 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
           Studentul(a) {certificate.fullName}, este înscris(ă) în anul
           universitar {faculty.academicYear}, în anul {certificate.studyYear} de
           studii, program de studii - {certificate.studyCycle} :{' '}
-          {certificate.studyProgram}, forma de învățământ :
+          {certificate.studyProgram
+            ? certificate.studyProgram
+            : certificate.studyDomain}
+          , forma de învățământ :
           {certificate.educationForm === 'IF'
             ? ' cu frecvență'
             : ' fără frecvență'}

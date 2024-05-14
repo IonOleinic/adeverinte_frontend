@@ -53,9 +53,11 @@ function ManageStudents() {
     return students.filter((student) => {
       return (
         student.email.toLowerCase().includes(filters.email.toLowerCase()) &&
-        removeAccents(student.studyProgram)
-          .toLowerCase()
-          .includes(filters.studyProgram.toLowerCase()) &&
+        (filters.studyProgram == '-'
+          ? !student.studyProgram
+          : removeAccents(student.studyProgram)
+              .toLowerCase()
+              .includes(filters.studyProgram.toLowerCase())) &&
         (filters.studyCycle
           ? removeAccents(student.studyCycle) === filters.studyCycle
           : true) &&

@@ -19,7 +19,7 @@ function StudentRow({ student, deleteStudent }) {
         <p>{student.studyDomain}</p>
       </td>
       <td className='student-row-item student-row-study-program'>
-        <p>{student.studyProgram}</p>
+        <p>{student.studyProgram || '-'}</p>
       </td>
       <td className='student-row-item student-row-study-cycle'>
         <p>{student.studyCycle}</p>

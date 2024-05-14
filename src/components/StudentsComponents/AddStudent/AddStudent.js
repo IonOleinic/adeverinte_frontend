@@ -193,7 +193,6 @@ function AddStudent() {
                 className='form-control'
                 id='floatingStudentDomain'
                 placeholder='Program de studii'
-                required
                 value={studyProgram}
                 onChange={(e) => {
                   setStudyProgram(e.target.value)
