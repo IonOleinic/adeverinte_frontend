@@ -79,6 +79,21 @@ table td > p {
   overflow: hidden;
 }
 
+/* buttons styles */
+.btn-reset-filters {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+.btn-reset-filters:hover {
+  background-color: #e7e7e7;
+  cursor: pointer;
+}
+
 /* primereact styles */
 .p-dialog,
 .p-dialog-content,
@@ -115,4 +130,20 @@ table td > p {
 
 .p-progressbar {
   width: 100%;
+}
+
+.p-inputtext {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+}
+
+.p-inline-message {
+  padding: 0.5rem 0.75rem;
+}
+.p-inline-message-icon {
+  margin-right: 0.5rem;
+}
+
+.p-float-label label {
+  margin-top: -0.5rem;
 }

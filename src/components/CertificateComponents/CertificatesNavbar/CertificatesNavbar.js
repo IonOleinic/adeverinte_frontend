@@ -2,8 +2,7 @@ import { NavLink } from 'react-router-dom'
 import { GrDocumentConfig } from 'react-icons/gr'
 import { AiOutlineFileAdd } from 'react-icons/ai'
 import { GrDocumentStore } from 'react-icons/gr'
-
-import './CertificateNavbar.css'
+import './CertificatesNavbar.css'
 
 function CertificateNavbar() {
   return (

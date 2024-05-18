@@ -10,28 +10,6 @@
 }
 .certificate-options-info {
   max-width: 800px;
-  border: 1px solid var(--light-blue);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  border-radius: 8px;
-  padding: 1rem;
-}
-.certificate-options-info-icon {
-  color: var(--light-blue);
-}
-
-.certificate-options-info > div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-.certificate-options-info p {
-  font-size: 1.1rem;
-  width: 100%;
-  text-align: left;
 }
 
 .certificate-options-form-container {

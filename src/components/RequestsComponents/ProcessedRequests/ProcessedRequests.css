@@ -12,12 +12,12 @@
   min-height: 60px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-around;
   border: 1px solid var(--light-grey);
   margin-bottom: 1rem;
   border-radius: 6px;
-  padding: 0 2rem;
-  gap: 2rem;
+  padding: 0 1rem;
+  /* gap: 2rem; */
 }
 .processed-requests-toolbar-item {
   display: flex;
@@ -40,6 +40,29 @@
 .processed-requests-toolbar-item label {
   word-break: keep-all;
   font-weight: 500;
+}
+.search-requests-by-date {
+  z-index: 2;
+}
+.search-requests-by-date input {
+  width: 100px;
+  padding: 0.2rem;
+}
+.btn-reset-requests-filter {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+.btn-reset-requests-filter:hover {
+  background-color: #e7e7e7;
+  cursor: pointer;
+}
+#tooltip-btn-reset-requests-filters {
+  z-index: 3;
 }
 .processed-requests-list {
   display: flex;

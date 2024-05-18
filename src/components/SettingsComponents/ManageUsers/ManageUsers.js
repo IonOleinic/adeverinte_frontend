@@ -23,18 +23,28 @@ function ManageUsers() {
   const [rows, setRows] = useState(10)
 
   const getUsers = async () => {
+    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/users')
       setUsers(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare la încărcarea utilizatorilor', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
     getUsers()
+    toast.dismiss()
+    return () => {
+      toast.dismiss()
+    }
   }, [])
 
   const deleteUser = async (id) => {

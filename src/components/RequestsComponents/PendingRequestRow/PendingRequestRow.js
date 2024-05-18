@@ -167,7 +167,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
       console.error(error)
       setBtnAcceptDisabled(false)
       setBtnAcceptTooltip('Acceptă')
-      if (error.response.status === 500) {
+      if (error.response?.status === 500) {
         toast.error(
           `Eroare. Setati numar NR de la optiuni si apoi reincercati.`,
           { theme: 'colored', autoClose: false }

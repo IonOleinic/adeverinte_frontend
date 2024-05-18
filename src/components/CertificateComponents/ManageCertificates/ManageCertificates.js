@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client'
 import PrintCertificatesPage from '../PrintCertificatesPage/PrintCertificatesPage'
 import CertificateRow from '../CertificateRow/CertificateRow'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
+import { Calendar } from 'primereact/calendar'
 import { toast } from 'react-toastify'
 import { Paginator } from 'primereact/paginator'
 import { IoPrintOutline } from 'react-icons/io5'
+import { AiOutlineUndo } from 'react-icons/ai'
 import { Tooltip } from 'react-tooltip'
 import useAuth from '../../../hooks/useAuth'
 import './ManageCertificates.css'
@@ -25,9 +27,21 @@ function ManageCertificates() {
     registrationNr: '',
     studentEmail: '',
     printed: '',
+    startDate: '',
+    endDate: '',
   })
   const [first, setFirst] = useState(0)
   const [rows, setRows] = useState(10)
+
+  const resetFilters = () => {
+    setFilters({
+      registrationNr: '',
+      studentEmail: '',
+      printed: '',
+      startDate: '',
+      endDate: '',
+    })
+  }
 
   useEffect(() => {
     const getFaculty = async () => {
@@ -73,14 +87,20 @@ function ManageCertificates() {
   }, [auth.email])
 
   const getCertificates = async () => {
+    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/certificates')
       setCertificates(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.log(error)
+      toast.error('Eroare la încărcarea adeverințelor', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -97,7 +117,15 @@ function ManageCertificates() {
           ? certificate.printed
             ? filters.printed === 'true'
             : filters.printed === 'false'
-          : true) // If printed filter is not defined, include all records
+          : true) && // If printed filter is not defined, include all records
+        (filters.startDate
+          ? new Date(certificate.createdAt) >=
+            filters.startDate.setHours(0, 0, 0, 0)
+          : true) &&
+        (filters.endDate
+          ? new Date(certificate.createdAt) <=
+            filters.endDate.setHours(23, 59, 59, 999)
+          : true)
       )
     })
   }, [certificates, filters])
@@ -161,6 +189,10 @@ function ManageCertificates() {
 
   useEffect(() => {
     getCertificates()
+    toast.dismiss()
+    return () => {
+      toast.dismiss()
+    }
   }, [])
 
   useEffect(() => {
@@ -181,12 +213,12 @@ function ManageCertificates() {
   return (
     <div className='manage-certificates'>
       <div className='manage-certificates-toolbar'>
-        <div className='manage-certificates-toolbar-item search-certificates-by-registration-nr'>
-          <label htmlFor='search-by-registration-nr'>Nr înregistrare:</label>
+        <div className='manage-certificates-toolbar-item search-certificates-by-nr'>
+          <label htmlFor='search-by-nr'>Nr:</label>
           <input
             type='text'
             placeholder='nr înregistrare'
-            id='search-by-registration-nr'
+            id='search-by-nr'
             className='form-control'
             value={filters.registrationNr}
             onChange={(e) => {
@@ -194,8 +226,8 @@ function ManageCertificates() {
             }}
           />
         </div>
-        <div className='manage-certificates-toolbar-item search-certificates-by-student-email'>
-          <label htmlFor='search-by-email'>Email student:</label>
+        <div className='manage-certificates-toolbar-item search-certificates-by-email'>
+          <label htmlFor='search-by-email'>Email:</label>
           <input
             type='text'
             placeholder='cauta dupa email'
@@ -207,7 +239,7 @@ function ManageCertificates() {
             }}
           />
         </div>
-        <div className='manage-certificates-toolbar-item search-students-by-printed'>
+        <div className='manage-certificates-toolbar-item search-certificates-by-printed'>
           <label htmlFor='search-by-printed'>Printată:</label>
           <select
             className='form-control'
@@ -222,13 +254,28 @@ function ManageCertificates() {
             <option value={'false'}>Nu</option>
           </select>
         </div>
-        <div className='manage-certificates-toolbar-item search-students-by-printed'>
+        <div className='manage-certificates-toolbar-item search-certificates-by-date'>
+          <label htmlFor='search-by-start-date'>Data:</label>
+          <Calendar
+            id='search-by-start-date'
+            value={filters.startDate}
+            onChange={(e) => handleFilterChange('startDate', e.value)}
+            dateFormat='dd/mm/yy'
+          />
+          <p>-</p>
+          <Calendar
+            id='search-by-end-date'
+            value={filters.endDate}
+            onChange={(e) => handleFilterChange('endDate', e.value)}
+            dateFormat='dd/mm/yy'
+          />
+        </div>
+        <div className='manage-certificates-toolbar-item'>
           <Tooltip id={`tooltip-btn-print-selected-certificates`} />
           <button
             data-tooltip-id={`tooltip-btn-print-selected-certificates`}
             data-tooltip-content={'Printează adeverințele selectate'}
             data-tooltip-place='left'
-            id='btn-print-selected-certificates'
             className='btn btn-primary btn-print-selected-certificates'
             disabled={selectedCertificates.filter((cert) => cert).length === 0}
             onClick={() => {
@@ -241,6 +288,20 @@ function ManageCertificates() {
           >
             <IoPrintOutline size={23} />
             <p>Printează</p>
+          </button>
+        </div>
+        <div className='manage-certificates-toolbar-item'>
+          <Tooltip id={`tooltip-btn-reset-certificates-filters`} />
+          <button
+            data-tooltip-id={`tooltip-btn-reset-certificates-filters`}
+            data-tooltip-content={'Resetează filtrele'}
+            data-tooltip-place='left'
+            className='btn-reset-filters'
+            onClick={() => {
+              resetFilters()
+            }}
+          >
+            <AiOutlineUndo size={23} />
           </button>
         </div>
       </div>

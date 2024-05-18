@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom'
-import { LiaUsersCogSolid } from 'react-icons/lia'
 import { LiaBuilding } from 'react-icons/lia'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { PiUsersThreeLight } from 'react-icons/pi'

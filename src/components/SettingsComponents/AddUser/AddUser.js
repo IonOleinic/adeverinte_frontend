@@ -101,12 +101,15 @@ function AddUser() {
       } catch (error) {
         console.log(error)
         form.classList.remove('was-validated')
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           setInvalidUserEmailBool(true)
           setInvalidUserEmailMessage(
             'Un utilizator cu acest email există deja.'
           )
-        } else if (error.response.status === 500) {
+        } else if (error.response?.status === 500) {
+          setServerErrorBool(true)
+          setServerErrorMessage('Eroare server.')
+        } else {
           setServerErrorBool(true)
           setServerErrorMessage('Eroare server.')
         }
@@ -115,10 +118,9 @@ function AddUser() {
   }
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 

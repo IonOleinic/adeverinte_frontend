@@ -34,11 +34,13 @@ function EditCertificate() {
       setPrinted(certificate.printed)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare server.', { autoClose: false, theme: 'colored' })
     }
   }
 
   const editCertificate = async (e) => {
     e.preventDefault()
+    toast.dismiss()
     setInvalidCertificatePurposeBool(false)
     setServerErrorBool(false)
     setDisabledEditBtn(true)
@@ -68,6 +70,7 @@ function EditCertificate() {
             studentEmail,
             certificatePurpose,
             printed,
+            selected: false,
           }
         )
         toast.success(
@@ -79,9 +82,11 @@ function EditCertificate() {
       } catch (error) {
         console.log(error)
         form.classList.remove('was-validated')
-        if (error.response.status === 500) {
+        if (error.response?.status === 500) {
           setServerErrorBool(true)
           setServerErrorMessage('Eroare la server. Încearcă din nou')
+        } else {
+          toast.error('Eroare server.', { autoClose: false, theme: 'colored' })
         }
       }
     }
@@ -92,10 +97,9 @@ function EditCertificate() {
   }, [registrationNr])
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 

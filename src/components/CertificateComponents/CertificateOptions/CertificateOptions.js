@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { IoInformationCircleOutline } from 'react-icons/io5'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { toast } from 'react-toastify'
+import { Message } from 'primereact/message'
 import useRoles from '../../../hooks/useRoles'
 import useAuth from '../../../hooks/useAuth'
 import './CertificateOptions.css'
@@ -57,7 +57,7 @@ function CertificateOptions() {
         })
       } catch (error) {
         console.log(error)
-        if (error.response.status === 400) {
+        if (error.response?.status === 400) {
           form.classList.remove('was-validated')
           setinvalidMaskBool(true)
           setinvalidMaskMessage('Masca introdusa nu este valida')
@@ -65,12 +65,18 @@ function CertificateOptions() {
             theme: 'colored',
             autoClose: false,
           })
+        } else {
+          toast.error('Eroare server.', {
+            autoClose: false,
+            theme: 'colored',
+          })
         }
       }
     }
   }
   useEffect(() => {
     getLastUsedMask()
+    toast.dismiss()
     getCertificateOptions()
     return () => {
       toast.dismiss()
@@ -84,20 +90,14 @@ function CertificateOptions() {
   return (
     <div className='certificate-options'>
       <div className='certificate-options-info'>
-        <IoInformationCircleOutline
-          size={45}
-          className='certificate-options-info-icon'
-        />
-        <div>
-          <p>
-            {`Atenție, pentru a putea crea o adeverință, trebuie să setati numarul
+        <Message
+          severity='info'
+          text='Atenție, pentru a putea crea o adeverință, trebuie să setati numarul
           NR, necesar generarii adeverinței. De asemenea, ca administrator
-          puteti seta masca numarului de inregistrare.
-          `}
-          </p>
-          <p>{`Va rog sa respectati formatul.`}</p>
-          <p>{`Exemplu: NR.A.i/[data]`}</p>
-        </div>
+          puteți seta masca numărului de înregistrare.
+          Vă rugăm sa respectați formatul.
+          Exemplu: NR.A.i/[data]'
+        />
       </div>
       <div className='certificate-options-form-container'>
         <div className='card border-0 rounded-3 my-5 certificate-options-card'>

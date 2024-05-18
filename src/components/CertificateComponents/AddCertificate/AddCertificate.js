@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
-import { IoInformationCircleOutline } from 'react-icons/io5'
+import { Message } from 'primereact/message'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import './AddCertificate.css'
@@ -25,6 +25,7 @@ function AddCertificate() {
 
   const addCertificate = async (e) => {
     e.preventDefault()
+    toast.dismiss()
     setInvalidStudentEmailBool(false)
     setInvalidCertificatePurposeBool(false)
     setServerErrorBool(false)
@@ -65,12 +66,12 @@ function AddCertificate() {
       } catch (error) {
         console.log(error)
         form.classList.remove('was-validated')
-        if (error.response.status === 404) {
+        if (error.response?.status === 404) {
           setInvalidStudentEmailBool(true)
           setInvalidStudentEmailMessage(
             'Nu s-a gasit nici un student cu acest email'
           )
-        } else if (error.response.status === 500) {
+        } else if (error.response?.status === 500) {
           setServerErrorBool(true)
           setServerErrorMessage(
             'Nu s-a putut genera numar de înregistrare. Setati numar NR si apoi reincercati.'
@@ -79,6 +80,8 @@ function AddCertificate() {
             `Eroare. Setati numar NR de la optiuni si apoi reincercati.`,
             { theme: 'colored', autoClose: false }
           )
+        } else {
+          toast.error('Eroare server.', { theme: 'colored', autoClose: false })
         }
       }
     }
@@ -88,10 +91,9 @@ function AddCertificate() {
   }, [studentEmail, certificatePurpose])
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 
@@ -111,17 +113,11 @@ function AddCertificate() {
   return (
     <div className='add-certificate'>
       <div className='add-certificate-info'>
-        <IoInformationCircleOutline
-          size={45}
-          className='add-certificate-info-icon'
+        <Message
+          severity='info'
+          text='Atenție, pentru a putea crea o adeverință, trebuie să fie setat numărul de înregistrare
+          NR, necesar generării adeverinței.'
         />
-        <div>
-          <p>
-            {`Atenție, pentru a putea crea o adeverință, trebuie să fie setat numarul de inregistrare
-          NR, necesar generarii adeverinței.
-          `}
-          </p>
-        </div>
       </div>
       <div className='add-certificate-form-container'>
         <div className='card border-0 rounded-3 my-5 certificate-card'>

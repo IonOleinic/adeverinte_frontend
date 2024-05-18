@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { FaGoogle } from 'react-icons/fa'
 import { useGoogleLogin } from '@react-oauth/google'
-import { GoogleLogin } from '@react-oauth/google'
 import SiglaUSVNume from './images/usv-sigla-nume.jpg'
 import { toast } from 'react-toastify'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -131,6 +130,10 @@ function SignIn() {
     localStorage.setItem('persist', persist)
   }, [persist])
 
+  useEffect(() => {
+    toast.dismiss()
+    return () => toast.dismiss()
+  }, [])
   return (
     <div className='signin'>
       <div className='sigin-usv-logo'>

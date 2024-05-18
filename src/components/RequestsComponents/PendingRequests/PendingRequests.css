@@ -88,11 +88,16 @@
   background-color: white !important;
 }
 
-.refresh-requests-btn {
-  padding: 0.5rem;
+.btn-refresh-requests {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.3rem;
   border-radius: 50%;
+  background-color: transparent;
+  border: none;
 }
-.refresh-requests-btn:hover {
+.btn-refresh-requests:hover {
   background-color: #e7e7e7;
   cursor: pointer;
 }

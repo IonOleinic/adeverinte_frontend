@@ -7,9 +7,9 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
   return (
     <div
       style={{
-        width: '520px',
-        height: '340px',
-        border: '1px solid black',
+        width: '500px',
+        height: '335px',
+        // border: '1px solid black',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',

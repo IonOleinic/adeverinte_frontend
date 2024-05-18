@@ -117,14 +117,19 @@ function AddUser() {
       } catch (error) {
         console.log(error)
         form.classList.remove('was-validated')
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           setInvalidUserEmailBool(true)
           setInvalidUserEmailMessage(
             'Un utilizator cu acest email există deja.'
           )
-        } else if (error.response.status === 500) {
+        } else if (error.response?.status === 500) {
           setServerErrorBool(true)
           setServerErrorMessage('Eroare server.')
+        } else {
+          toast.error('Eroare server.', {
+            autoClose: false,
+            theme: 'colored',
+          })
         }
       }
     }
@@ -147,6 +152,10 @@ function AddUser() {
 
   useEffect(() => {
     getUser()
+    toast.dismiss()
+    return () => {
+      toast.dismiss()
+    }
   }, [userId])
 
   useEffect(() => {

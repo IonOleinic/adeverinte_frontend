@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import CertificateNavbar from '../../components/CertificateComponents/CertificateNavbar/CertificateNavbar'
+import CertificatesNavbar from '../../components/CertificateComponents/CertificatesNavbar/CertificatesNavbar'
 import CertificateOptions from '../../components/CertificateComponents/CertificateOptions/CertificateOptions'
 import AddCertificate from '../../components/CertificateComponents/AddCertificate/AddCertificate'
 import ManageCertificates from '../../components/CertificateComponents/ManageCertificates/ManageCertificates'
@@ -10,7 +10,7 @@ import './Certificates.css'
 function Certificates() {
   return (
     <>
-      <CertificateNavbar />
+      <CertificatesNavbar />
       <div className='certificates-container'>
         <Routes>
           <Route index element={<Navigate to='manage-certificates' />} />

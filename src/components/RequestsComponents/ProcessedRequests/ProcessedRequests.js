@@ -2,9 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import './ProcessedRequests.css'
 import { Paginator } from 'primereact/paginator'
+import { Calendar } from 'primereact/calendar'
 import ProcessedRequestRow from '../ProcessedRequestRow/ProcessedRequestRow'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 import useLoading from '../../../hooks/useLoading'
+import { AiOutlineUndo } from 'react-icons/ai'
+import { Tooltip } from 'react-tooltip'
+import { toast } from 'react-toastify'
 
 function ProcessedRequests() {
   const axiosPrivate = useAxiosPrivate()
@@ -14,7 +18,19 @@ function ProcessedRequests() {
     studentEmail: '',
     handledBy: '',
     accepted: '',
+    startDate: '',
+    endDate: '',
   })
+
+  const resetFilters = () => {
+    setFilters({
+      studentEmail: '',
+      handledBy: '',
+      accepted: '',
+      startDate: '',
+      endDate: '',
+    })
+  }
   const [first, setFirst] = useState(0)
   const [rows, setRows] = useState(10)
 
@@ -30,12 +46,19 @@ function ProcessedRequests() {
   const getProcessedRequests = async () => {
     try {
       setIsLoading(true)
-      const response = await axiosPrivate.get('/processed-certificate-requests')
+      const response = await axiosPrivate.get(
+        '/certificate-requests?processed=true'
+      )
       setProcessedRequests(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare la încărcarea cererilor', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -52,7 +75,13 @@ function ProcessedRequests() {
           ? request.accepted
             ? filters.accepted === 'true'
             : filters.accepted === 'false'
-          : true) // If printed filter is not defined, include all records
+          : true) && // If printed filter is not defined, include all records // If printed filter is not defined, include all records
+        (filters.startDate
+          ? new Date(request.date) >= filters.startDate.setHours(0, 0, 0, 0)
+          : true) &&
+        (filters.endDate
+          ? new Date(request.date) <= filters.endDate.setHours(23, 59, 59, 999)
+          : true)
       )
     })
   }, [processedRequests, filters])
@@ -63,6 +92,10 @@ function ProcessedRequests() {
 
   useEffect(() => {
     getProcessedRequests()
+    toast.dismiss()
+    return () => {
+      toast.dismiss()
+    }
   }, [])
 
   const onPageChange = (event) => {
@@ -114,6 +147,36 @@ function ProcessedRequests() {
             <option value={'true'}>Da</option>
             <option value={'false'}>Nu</option>
           </select>
+        </div>
+        <div className='processed-requests-toolbar-item search-requests-by-date'>
+          <label htmlFor='search-by-start-date'>Data:</label>
+          <Calendar
+            id='search-by-start-date'
+            value={filters.startDate}
+            onChange={(e) => handleFilterChange('startDate', e.value)}
+            dateFormat='dd/mm/yy'
+          />
+          <p>-</p>
+          <Calendar
+            id='search-by-end-date'
+            value={filters.endDate}
+            onChange={(e) => handleFilterChange('endDate', e.value)}
+            dateFormat='dd/mm/yy'
+          />
+        </div>
+        <div className='processed-requests-toolbar-item'>
+          <Tooltip id={`tooltip-btn-reset-requests-filters`} />
+          <button
+            data-tooltip-id={`tooltip-btn-reset-requests-filters`}
+            data-tooltip-content={'Resetează filtrele'}
+            data-tooltip-place='left'
+            className='btn-reset-filters'
+            onClick={() => {
+              resetFilters()
+            }}
+          >
+            <AiOutlineUndo size={23} />
+          </button>
         </div>
       </div>
       <div className='processed-requests-list'>

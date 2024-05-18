@@ -3,6 +3,7 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import PendingRequestRow from '../PendingRequestRow/PendingRequestRow'
 import { LuRefreshCcw } from 'react-icons/lu'
 import { Paginator } from 'primereact/paginator'
+import { Tooltip } from 'react-tooltip'
 import { toast } from 'react-toastify'
 import useLoading from '../../../hooks/useLoading'
 import './PendingRequests.css'
@@ -22,12 +23,19 @@ function PendingRequests() {
   const getPendingRequests = useCallback(async () => {
     try {
       setIsLoading(true)
-      const response = await axiosPrivate.get('/pending-certificate-requests')
+      const response = await axiosPrivate.get(
+        '/certificate-requests?processed=false'
+      )
       setPendingRequests(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare la încărcarea cererilor', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
@@ -39,9 +47,14 @@ function PendingRequests() {
       )
       setPendingRequests(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare la încărcarea cererilor', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -79,20 +92,24 @@ function PendingRequests() {
   }
 
   useEffect(() => {
-    return () =>
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+    toast.dismiss()
+    return () => toast.dismiss()
   }, [])
 
   return (
     <div className='pending-requests'>
       <div className='pending-requests-toolbar'>
-        <div
-          className='pending-requests-toolbar-item refresh-requests-btn'
-          onClick={loadRequestsFromSpreadsheet}
-        >
-          <LuRefreshCcw size={19} />
+        <div className='pending-requests-toolbar-item btn-refresh-requests'>
+          <Tooltip id={`tooltip-btn-refresh-requests`} />
+          <button
+            data-tooltip-id={`tooltip-btn-refresh-requests`}
+            data-tooltip-content={'Refresh'}
+            data-tooltip-place='left'
+            className='btn-refresh-requests'
+            onClick={loadRequestsFromSpreadsheet}
+          >
+            <LuRefreshCcw size={19} />
+          </button>
         </div>
         <div className='pending-requests-toolbar-item search-requests-by-email'>
           <label htmlFor='search-by-email'>Email:</label>

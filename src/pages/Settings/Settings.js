@@ -6,6 +6,7 @@ import ManageUsers from '../../components/SettingsComponents/ManageUsers/ManageU
 import AddUser from '../../components/SettingsComponents/AddUser/AddUser'
 import EditUser from '../../components/SettingsComponents/EditUser/EditUser'
 import EditFaculty from '../../components/SettingsComponents/EditFaculty/EditFaculty'
+import GeneralSettings from '../../components/SettingsComponents/GeneralSettings/GeneralSettings'
 
 function Settings() {
   return (
@@ -18,7 +19,7 @@ function Settings() {
           <Route path='manage-users/add-user' element={<AddUser />} />
           <Route path='manage-users/edit-user/:userId' element={<EditUser />} />
           <Route path='manage-faculty' element={<EditFaculty />} />
-          <Route path='system-settings' element={<h1>Setări sistem</h1>} />
+          <Route path='system-settings' element={<GeneralSettings />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </div>

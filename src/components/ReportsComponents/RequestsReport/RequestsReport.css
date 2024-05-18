@@ -1,0 +1,17 @@
+.requests-report {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
+  height: 100%;
+  padding: 2rem;
+}
+
+.requests-report-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+}

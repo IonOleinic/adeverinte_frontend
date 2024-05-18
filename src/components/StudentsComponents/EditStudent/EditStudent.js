@@ -77,6 +77,10 @@ function EditStudent() {
         }, 500)
       } catch (error) {
         console.log(error)
+        toast.error('Eroare la actualizarea studentului.', {
+          theme: 'colored',
+          autoClose: false,
+        })
       }
     }
   }
@@ -95,10 +99,9 @@ function EditStudent() {
   ])
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 

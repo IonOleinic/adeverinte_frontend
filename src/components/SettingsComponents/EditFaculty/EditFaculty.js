@@ -144,10 +144,9 @@ function EditFaculty() {
   }, [])
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 

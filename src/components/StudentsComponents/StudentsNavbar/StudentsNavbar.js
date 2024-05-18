@@ -12,15 +12,15 @@ function StudentsNavbar() {
       <ul className='students-nav-list'>
         <CustomLink to='/students/manage-students'>
           <GrGroup size={21} />
-          <p>Gestiune studenti</p>
+          <p>Gestiune studenți</p>
         </CustomLink>
         <CustomLink to='/students/add-student'>
           <IoPersonAddOutline size={21} />
-          <p>Adauga student</p>
+          <p>Adaugă student</p>
         </CustomLink>
         <CustomLink to='/students/upload-students'>
           <LiaFileUploadSolid size={24} />
-          <p>Incarca studenti</p>
+          <p>Încarcă studenți</p>
         </CustomLink>
       </ul>
     </div>

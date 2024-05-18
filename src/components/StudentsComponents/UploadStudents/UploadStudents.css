@@ -5,10 +5,9 @@
   justify-content: flex-start;
   flex-direction: column;
   width: 100%;
-  gap: 3rem;
+  gap: 2rem;
   height: 100%;
   padding: 1rem;
-  padding-top: 3rem;
 }
 .upload-students-top {
   display: flex;
@@ -25,19 +24,8 @@
 
 .upload-students-warning {
   max-width: 500px;
-  border: 1px solid gold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  border-radius: 8px;
-  padding: 1rem;
 }
-.upload-students-warning p {
-  font-size: 1.1rem;
-  height: 80px;
-  width: 80%;
-}
+
 .upload-students-controls {
   display: flex;
   flex-direction: column;
@@ -82,6 +70,16 @@
   gap: 1rem;
   width: 100%;
   overflow: hidden;
+  height: 300px;
+}
+.failed-students-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.failed-students-message {
+  width: 70%;
+  flex-grow: 1;
 }
 .failed-students-table-container h3 {
   color: red;

@@ -1,0 +1,7 @@
+.reports-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 82%;
+  height: 100%;
+}

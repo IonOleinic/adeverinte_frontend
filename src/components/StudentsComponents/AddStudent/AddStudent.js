@@ -23,6 +23,7 @@ function AddStudent() {
   const addStudent = async (e) => {
     e.preventDefault()
     setDisabledAddBtn(true)
+    toast.dismiss()
     const form = document.getElementById('add-student-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
@@ -55,10 +56,15 @@ function AddStudent() {
         }, 500)
       } catch (error) {
         console.log(error)
-        if (error.response.status === 409) {
+        if (error.response?.status === 409) {
           form.classList.remove('was-validated')
           setEmailFieldErrorMessage('Exista deja un student cu acest email')
           setEmailFieldErrorBool(true)
+        } else {
+          toast.error('Eroare server.', {
+            autoClose: false,
+            theme: 'colored',
+          })
         }
       }
     }
@@ -89,10 +95,9 @@ function AddStudent() {
   ])
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 

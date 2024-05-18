@@ -1,9 +1,9 @@
 import * as XLSX from 'xlsx'
-import { IoWarningSharp } from 'react-icons/io5'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { ProgressBar } from 'primereact/progressbar'
 import { confirmDialog } from 'primereact/confirmdialog'
+import { Message } from 'primereact/message'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useLoading from '../../../hooks/useLoading'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
@@ -23,7 +23,6 @@ function UploadStudents() {
 
   const uploadStudents = async () => {
     toast.dismiss()
-    console.log(students.length)
     setDisabledUploadBtn(true)
     setSuccessStudentsCount(0)
     setProcessedStudentsCount(0)
@@ -148,10 +147,9 @@ function UploadStudents() {
   }
 
   useEffect(() => {
+    toast.dismiss()
     return () => {
-      setTimeout(() => {
-        toast.dismiss()
-      }, 2000)
+      toast.dismiss()
     }
   }, [])
 
@@ -166,11 +164,11 @@ function UploadStudents() {
       <div className='upload-students-top'>
         <div className='upload-students-main'>
           <div className='upload-students-warning'>
-            <IoWarningSharp size={45} color='gold' />
-            <p>
-              Atenție, la încărcarea unui nou fișier, lista internă cu toți
-              studenții din baza de date va fi resetată.
-            </p>
+            <Message
+              severity='warn'
+              text='Atenție, la încărcarea unui nou fișier, lista internă cu toți
+              studenții din baza de date va fi resetată.'
+            />
           </div>
           <div className='upload-students-controls'>
             <div className='mb-3 upload-students-input-file'>
@@ -247,6 +245,7 @@ function UploadStudents() {
           </div>
         </div>
       </div>
+
       <ProgressBar
         value={processedStudentsPercent}
         className={
@@ -255,6 +254,7 @@ function UploadStudents() {
             : 'upload-students-progress-bar-hidden'
         }
       ></ProgressBar>
+
       <div
         className={
           failedStudents.length > 0
@@ -262,7 +262,14 @@ function UploadStudents() {
             : 'failed-students-table-container-hidden'
         }
       >
-        <h3>{`Studenți neîncarcați (${failedStudents.length}) :`}</h3>
+        <div className='failed-students-top'>
+          <h3>{`Studenți neîncarcați (${failedStudents.length}) :`}</h3>
+          <Message
+            severity='error'
+            className='failed-students-message'
+            text='De regulă, un student nu poate fi încărcat din cauza detectării unor duplicate (email) sau din cauza lipsei datelor unor câmpuri (email, nume, domeniu, ciclu, an, forma de învățământ, finanțare sau sex).'
+          />
+        </div>
         <table className='failed-students-table'>
           <thead>
             <tr className='failed-student-row failed-student-row-header'>
@@ -270,7 +277,7 @@ function UploadStudents() {
                 Rând excel
               </th>
               <th className='failed-student-row-item failed-student-row-fullname'>
-                Nume Complet
+                Nume complet
               </th>
               <th className='failed-student-row-item failed-student-row-email'>
                 Email

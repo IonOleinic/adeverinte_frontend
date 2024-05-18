@@ -1,0 +1,75 @@
+.general-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* gap: 8rem; */
+  height: 100%;
+  padding: 3rem 3rem;
+}
+.general-settings-item {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  gap: 2rem;
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.general-settings-item-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  background-color: #e0e0e0;
+  width: fit-content;
+  border-radius: 4px;
+  margin-top: -40px;
+  margin-left: 10px;
+}
+.spreadsheet-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.spreadsheet-card {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.spreadsheet-card-body {
+  width: 100%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.div-btn-edit-spreadsheet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.btn-edit-spreadsheet {
+  width: 40%;
+  min-width: 200px;
+}
+
+.spreadsheet-form-invalid-feedback {
+  display: block !important;
+}
+.spreadsheet-form-valid-feedback {
+  display: none !important;
+}
+
+.div-btn-reset-app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.btn-reset-app {
+  width: 40%;
+  min-width: 200px;
+}

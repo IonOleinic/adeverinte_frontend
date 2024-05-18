@@ -4,6 +4,8 @@ import StudentRow from '../StudentRow/StudentRow'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { Paginator } from 'primereact/paginator'
 import { toast } from 'react-toastify'
+import { AiOutlineUndo } from 'react-icons/ai'
+import { Tooltip } from 'react-tooltip'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 import useLoading from '../../../hooks/useLoading'
 
@@ -23,19 +25,38 @@ function ManageStudents() {
   const [first, setFirst] = useState(0)
   const [rows, setRows] = useState(10)
 
+  const resetFilters = () => {
+    setFilters({
+      email: '',
+      studyProgram: '',
+      studyCycle: '',
+      studyYear: '',
+    })
+  }
+
   const getStudents = async () => {
+    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/students')
       setStudents(response.data)
       console.log(response.data)
-      setIsLoading(false)
     } catch (error) {
       console.error(error)
+      toast.error('Eroare la încărcarea studenților', {
+        autoClose: false,
+        theme: 'colored',
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
     getStudents()
+    toast.dismiss()
+    return () => {
+      toast.dismiss()
+    }
   }, [])
 
   const deleteStudent = async (id) => {
@@ -138,6 +159,20 @@ function ManageStudents() {
             <option value={'3'}>3</option>
             <option value={'4'}>4</option>
           </select>
+        </div>
+        <div className='manage-students-toolbar-item'>
+          <Tooltip id={`tooltip-btn-reset-students-filters`} />
+          <button
+            data-tooltip-id={`tooltip-btn-reset-students-filters`}
+            data-tooltip-content={'Resetează filtrele'}
+            data-tooltip-place='left'
+            className='btn-reset-filters'
+            onClick={() => {
+              resetFilters()
+            }}
+          >
+            <AiOutlineUndo size={23} />
+          </button>
         </div>
       </div>
       <div className='manage-students-list'>
