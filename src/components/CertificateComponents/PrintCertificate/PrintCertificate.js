@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import QRCode from 'react-qr-code'
 
 const removeAccents = (str) =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -14,6 +15,7 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '10px',
+        position: 'relative',
       }}
     >
       <div
@@ -22,7 +24,7 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
           flexDirection: 'column',
           gap: '3px',
           fontSize: '0.75rem',
-          height: '40px',
+          height: '60px',
         }}
       >
         <p style={{ margin: 0 }}>UNIVERSITATEA STEFAN CEL MARE DIN SUCEAVA</p>
@@ -41,6 +43,17 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
         <p style={{ fontSize: '0.9rem', margin: '0' }}>
           Nr. ............../FIESC/...................
         </p>
+      </div>
+      <div
+        style={{
+          height: '50px',
+          width: '50px',
+          position: 'absolute',
+          top: '0px',
+          right: '10px',
+        }}
+      >
+        <QRCode size={50} value={certificate.registrationNr} />
       </div>
       <div
         style={{
@@ -66,7 +79,7 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
           Studentul(a) {certificate.fullName}, este înscris(ă) în anul
           universitar {faculty.academicYear}, în anul {certificate.studyYear} de
           studii, program de studii - {certificate.studyCycle} :{' '}
-          {certificate.studyProgram
+          {certificate.studyProgram.length > 1
             ? certificate.studyProgram
             : certificate.studyDomain}
           , forma de învățământ :
