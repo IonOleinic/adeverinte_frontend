@@ -8,12 +8,13 @@ import { AiOutlineUndo } from 'react-icons/ai'
 import { Tooltip } from 'react-tooltip'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 import useLoading from '../../../hooks/useLoading'
+import EmptyList from '../../EmptyList/EmptyList'
 
 const removeAccents = (str) =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
 function ManageStudents() {
-  const { setIsLoading } = useLoading() // Use useLoading hook
+  const { isLoading, setIsLoading } = useLoading() // Use useLoading hook
   const axiosPrivate = useAxiosPrivate()
   const [students, setStudents] = useState([])
   const [filters, setFilters] = useState({
@@ -35,7 +36,6 @@ function ManageStudents() {
   }
 
   const getStudents = async () => {
-    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/students')
@@ -78,9 +78,10 @@ function ManageStudents() {
           ? !student.studyProgram
           : removeAccents(student.studyProgram)
               .toLowerCase()
-              .includes(filters.studyProgram.toLowerCase())) &&
+              .includes(removeAccents(filters.studyProgram.toLowerCase()))) &&
         (filters.studyCycle
-          ? removeAccents(student.studyCycle) === filters.studyCycle
+          ? removeAccents(student.studyCycle) ===
+            removeAccents(filters.studyCycle)
           : true) &&
         (filters.studyYear
           ? student.studyYear === parseInt(filters.studyYear)
@@ -176,47 +177,70 @@ function ManageStudents() {
         </div>
       </div>
       <div className='manage-students-list'>
-        <div className='manage-students-table-container'>
-          <table className='manage-students-table'>
-            <thead>
-              <tr className='student-row student-row-header'>
-                <th className='student-row-item student-row-fullname'>
-                  Nume complet
-                </th>
-                <th className='student-row-item student-row-email'>Email</th>
-                <th className='student-row-item student-row-study-domain'>
-                  Domeniul de studii
-                </th>
-                <th className='student-row-item student-row-study-program'>
-                  Program de studii
-                </th>
-                <th className='student-row-item student-row-study-cycle'>
-                  Ciclu de studii
-                </th>
-                <th className='student-row-item student-row-study-year'>An</th>
-                <th className='student-row-item student-row-buttons'></th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedStudents.map((student) => (
-                <StudentRow
-                  key={student.id}
-                  student={student}
-                  deleteStudent={deleteStudent}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='manage-students-paginator'>
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={filteredStudents.length}
-            rowsPerPageOptions={[10, 20, 50]}
-            onPageChange={onPageChange}
+        {displayedStudents.length == 0 ? (
+          <EmptyList
+            message='Nu sa găsit nici un student :('
+            visibility={!isLoading}
           />
-        </div>
+        ) : (
+          <>
+            <div className='manage-students-table-container'>
+              <table className='manage-students-table'>
+                <thead>
+                  <tr className='student-row student-row-header'>
+                    <th className='student-row-item student-row-fullname'>
+                      Nume complet
+                    </th>
+                    <th className='student-row-item student-row-email'>
+                      Email
+                    </th>
+                    <th className='student-row-item student-row-study-domain'>
+                      Domeniul de studii
+                    </th>
+                    <th className='student-row-item student-row-study-program'>
+                      Program de studii
+                    </th>
+                    <th className='student-row-item student-row-study-cycle'>
+                      Ciclu de studii
+                    </th>
+                    <th className='student-row-item student-row-study-year'>
+                      An
+                    </th>
+                    <th className='student-row-item student-row-buttons'>
+                      Acțiuni
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedStudents.map((student) => (
+                    <StudentRow
+                      key={student.id}
+                      student={student}
+                      deleteStudent={deleteStudent}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className='manage-students-paginator'>
+              <Paginator
+                first={first}
+                rows={rows}
+                totalRecords={filteredStudents.length}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={onPageChange}
+              />
+            </div>
+            <div className='manage-students-statistics'>
+              <p>{`Rezultate: ${filteredStudents.length} / ${students.length}`}</p>
+            </div>
+            <div className='manage-students-page-nr'>
+              <p>{`Pagina ${Math.ceil(first / rows + 1)} / ${Math.ceil(
+                filteredStudents.length / rows
+              )}`}</p>
+            </div>
+          </>
+        )}
         <LoadingLayer />
       </div>
     </div>

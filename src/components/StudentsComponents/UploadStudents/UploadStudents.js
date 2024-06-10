@@ -22,7 +22,6 @@ function UploadStudents() {
   const [fileProcessed, setFileProcessed] = useState(false)
 
   const uploadStudents = async () => {
-    toast.dismiss()
     setDisabledUploadBtn(true)
     setSuccessStudentsCount(0)
     setProcessedStudentsCount(0)
@@ -263,7 +262,7 @@ function UploadStudents() {
         }
       >
         <div className='failed-students-top'>
-          <h3>{`Studenți neîncarcați (${failedStudents.length}) :`}</h3>
+          <h3>{`Studenți neîncarcați (${failedStudents.length}):`}</h3>
           <Message
             severity='error'
             className='failed-students-message'
@@ -273,6 +272,9 @@ function UploadStudents() {
         <table className='failed-students-table'>
           <thead>
             <tr className='failed-student-row failed-student-row-header'>
+              <th className='failed-student-row-item failed-student-row-index'>
+                Nr.
+              </th>
               <th className='failed-student-row-item failed-student-row-excel-index'>
                 Rând excel
               </th>
@@ -294,8 +296,12 @@ function UploadStudents() {
             </tr>
           </thead>
           <tbody>
-            {failedStudents.map((student) => (
-              <FailedStudentRow key={student.excelIndex} student={student} />
+            {failedStudents.map((student, index) => (
+              <FailedStudentRow
+                key={student.excelIndex}
+                student={student}
+                index={index + 1}
+              />
             ))}
           </tbody>
         </table>

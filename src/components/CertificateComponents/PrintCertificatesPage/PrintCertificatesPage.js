@@ -33,7 +33,7 @@ const PrintCertificatesPage = ({ certificates, faculty, secretarName }) => {
         >
           {chunk.map((certificate) => (
             <PrintCertificate
-              key={certificate.registrationNumber}
+              key={certificate.registrationNr}
               certificate={certificate}
               faculty={faculty} // Pass faculty as a prop
               secretarName={secretarName} // Pass secretarName as a prop

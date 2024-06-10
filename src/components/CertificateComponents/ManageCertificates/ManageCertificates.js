@@ -13,9 +13,10 @@ import useAuth from '../../../hooks/useAuth'
 import './ManageCertificates.css'
 import useLoading from '../../../hooks/useLoading'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
+import EmptyList from '../../EmptyList/EmptyList'
 
 function ManageCertificates() {
-  const { setIsLoading } = useLoading() // Use useLoading hook
+  const { isLoading, setIsLoading } = useLoading() // Use useLoading hook
   const axiosPrivate = useAxiosPrivate()
   const { auth } = useAuth()
   const [faculty, setFaculty] = useState('') // Add this line
@@ -46,8 +47,8 @@ function ManageCertificates() {
   useEffect(() => {
     const getFaculty = async () => {
       try {
-        const response = await axiosPrivate.get('/faculty?shortName=FIESC') // Change this line
-        setFaculty(response.data)
+        const response = await axiosPrivate.get('/faculties') // Change this line
+        if (response.data[0]) setFaculty(response.data[0])
       } catch (error) {
         console.log(error)
       }
@@ -87,7 +88,6 @@ function ManageCertificates() {
   }, [auth.email])
 
   const getCertificates = async () => {
-    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/certificates')
@@ -306,70 +306,92 @@ function ManageCertificates() {
         </div>
       </div>
       <div className='manage-certificates-list'>
-        <div className='manage-certificates-table-container'>
-          <table className='manage-certificates-table'>
-            <thead>
-              <tr className='certificate-row certificate-row-header'>
-                <th className='certificate-row-item certificate-row-checkbox'>
-                  <input
-                    className='form-check-input'
-                    type='checkbox'
-                    value=''
-                    checked={
-                      selectedCertificates.length > 0
-                        ? selectedCertificates.every((cert) => cert)
-                        : false
-                    }
-                    id='flexCheckDefault'
-                    onChange={(e) => {
-                      setSelectedCertificates(
-                        selectedCertificates.map(() => e.target.checked)
-                      )
-                    }}
-                  />
-                </th>
-                <th className='certificate-row-item certificate-row-registration-nr'>
-                  Nr înregistrare
-                </th>
-                <th className='certificate-row-item certificate-row-fullname'>
-                  Nume complet
-                </th>
-                <th className='certificate-row-item certificate-row-email'>
-                  Email
-                </th>
-                <th className='certificate-row-item certificate-row-purpose'>
-                  Scopul adeverinței
-                </th>
-                <th className='certificate-row-item certificate-row-printed'>
-                  Printată
-                </th>
-                <th className='certificate-row-item certificate-row-buttons'></th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedCertificates.map((certificate, index) => (
-                <CertificateRow
-                  key={certificate.registrationNr}
-                  certificate={certificate}
-                  deleteCertificate={deleteCertificate}
-                  printCertificate={printCertificates}
-                  selectedCertificates={selectedCertificates}
-                  setSelectedCertificates={setSelectedCertificates}
-                  index={index}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='manage-certificates-paginator'>
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={filteredCertificates.length}
-            rowsPerPageOptions={[10, 20, 50]}
-            onPageChange={onPageChange}
+        {displayedCertificates.length === 0 ? (
+          <EmptyList
+            message={'Nu sa găsit nici o adeverință :('}
+            visibility={!isLoading}
           />
-        </div>
+        ) : (
+          <>
+            <div className='manage-certificates-table-container'>
+              <table className='manage-certificates-table'>
+                <thead>
+                  <tr className='certificate-row certificate-row-header'>
+                    <th className='certificate-row-item certificate-row-checkbox'>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        value=''
+                        checked={
+                          selectedCertificates.length > 0
+                            ? selectedCertificates.every((cert) => cert)
+                            : false
+                        }
+                        id='flexCheckDefault'
+                        onChange={(e) => {
+                          setSelectedCertificates(
+                            selectedCertificates.map(() => e.target.checked)
+                          )
+                        }}
+                      />
+                    </th>
+                    <th className='certificate-row-item certificate-row-registration-nr'>
+                      Nr înregistrare
+                    </th>
+                    <th className='certificate-row-item certificate-row-fullname'>
+                      Nume complet
+                    </th>
+                    <th className='certificate-row-item certificate-row-email'>
+                      Email
+                    </th>
+                    <th className='certificate-row-item certificate-row-purpose'>
+                      Scopul adeverinței
+                    </th>
+                    <th className='certificate-row-item certificate-row-printed'>
+                      Printată
+                    </th>
+                    <th className='certificate-row-item certificate-row-buttons'>
+                      Acțiuni
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedCertificates.map((certificate, index) => (
+                    <CertificateRow
+                      key={certificate.registrationNr}
+                      certificate={certificate}
+                      deleteCertificate={deleteCertificate}
+                      printCertificate={printCertificates}
+                      selectedCertificates={selectedCertificates}
+                      setSelectedCertificates={setSelectedCertificates}
+                      index={index}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className='manage-certificates-paginator'>
+              <Paginator
+                first={first}
+                rows={rows}
+                totalRecords={filteredCertificates.length}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={onPageChange}
+              />
+            </div>
+            <div className='manage-certificates-statistics'>
+              <p>{`Selectate: ${
+                selectedCertificates.filter((cert) => cert).length
+              }`}</p>
+              <p>{`Rezultate: ${filteredCertificates.length} / ${certificates.length}`}</p>
+            </div>
+            <div className='manage-certificates-page-nr'>
+              <p>{`Pagina ${Math.ceil(first / rows + 1)} / ${Math.ceil(
+                filteredCertificates.length / rows
+              )}`}</p>
+            </div>
+          </>
+        )}
         <LoadingLayer />
       </div>
     </div>

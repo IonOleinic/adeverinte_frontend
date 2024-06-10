@@ -65,6 +65,30 @@
   align-items: center;
   width: 100%;
 }
+.manage-students-statistics {
+  position: absolute;
+  bottom: 1rem;
+  left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+.manage-students-statistics p {
+  font-size: 1rem;
+  color: var(--normal-grey);
+}
+.manage-students-page-nr {
+  position: absolute;
+  bottom: 1rem;
+  right: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 200px;
+}
+.manage-students-page-nr p {
+  font-size: 1rem;
+  color: var(--normal-grey);
+}
 .manage-students-table {
   width: 100%;
   height: 100%;

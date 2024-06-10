@@ -1,0 +1,32 @@
+.empty-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin-bottom: 5rem;
+  user-select: none;
+}
+.empty-list-container-hidden {
+  display: none;
+}
+.empty-list-container img {
+  max-height: 400px;
+  pointer-events: none;
+}
+.empty-list-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.empty-list-message-container p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: rgb(50, 50, 50);
+}
+
+.empty-list-message-container img {
+  width: 30px;
+}

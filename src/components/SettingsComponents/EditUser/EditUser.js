@@ -71,7 +71,15 @@ function AddUser() {
       setInvalidFirstNameMessage('Prenumele trebuie să aibă minim 2 caractere')
       return
     }
+
     if (useNewPassword) {
+      if (!checkPassword(password)) {
+        setInvalidPasswordBool(true)
+        setInvalidPasswordMessage(
+          'Parola trebuie să conțină cel puțin 8 caractere, o literă mare, o literă mică, un număr și un caracter special.'
+        )
+        return
+      }
       if (password != confirmPassword) {
         setInvalidConfirmPasswordBool(true)
         setInvalidConfirmPasswordMessage('Parolele nu coincid!')
@@ -148,6 +156,11 @@ function AddUser() {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  function checkPassword(str) {
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*.])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    return re.test(str)
   }
 
   useEffect(() => {

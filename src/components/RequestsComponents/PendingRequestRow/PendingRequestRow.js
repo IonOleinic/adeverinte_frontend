@@ -12,7 +12,7 @@ import './PendingRequestRow.css'
 
 const getFormatedDate = (date) => {
   const dateObj = new Date(date)
-  return `${dateObj.getDate()}.${addZero(
+  return `${addZero(dateObj.getDate())}.${addZero(
     dateObj.getMonth() + 1
   )}.${dateObj.getFullYear()} ${addZero(dateObj.getHours())}:${addZero(
     dateObj.getMinutes()
@@ -56,6 +56,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
     useState(false)
   const [btnAcceptDisabled, setBtnAcceptDisabled] = useState(false)
   const [btnAcceptTooltip, setBtnAcceptTooltip] = useState('Accepta')
+  const [btnRejectDisabled, setBtnRejectDisabled] = useState(false)
   const [btnRejectTooltip, setBtnRejectTooltip] = useState('Refuză')
 
   const saveRequest = async (e) => {
@@ -135,7 +136,9 @@ function PendingRequestRow({ request, getPendingRequests }) {
 
   const acceptRequest = async (request) => {
     setBtnAcceptDisabled(true)
+    setBtnRejectDisabled(true)
     setBtnAcceptTooltip('Se procesează...')
+    setBtnRejectTooltip('Se procesează...')
     toast.dismiss()
 
     if (certificatePurpose.length < 5) {
@@ -153,20 +156,18 @@ function PendingRequestRow({ request, getPendingRequests }) {
       request.accepted = true
       request.handledBy = user ? `${user.lastName} ${user.firstName}` : 'Admin'
       request.certificatePurpose = certificatePurpose
-      await axiosPrivate.post('/certificate', {
-        studentEmail: request.studentEmail,
-        certificatePurpose: request.certificatePurpose,
-        date: request.date,
-      })
-      await axiosPrivate.put(`/certificate-request/${request.id}`, request)
+      const response = await axiosPrivate.post('/certificate', request)
+      request.registrationNr = response.data.registrationNr
+      await axiosPrivate.put(
+        `/accept-certificate-request/${request.id}`,
+        request
+      )
       toast.success(
         `A fost adaugată o nouă adeverință pentru ${student?.fullName}`
       )
       getPendingRequests()
     } catch (error) {
       console.error(error)
-      setBtnAcceptDisabled(false)
-      setBtnAcceptTooltip('Acceptă')
       if (error.response?.status === 500) {
         toast.error(
           `Eroare. Setati numar NR de la optiuni si apoi reincercati.`,
@@ -178,6 +179,11 @@ function PendingRequestRow({ request, getPendingRequests }) {
           autoClose: false,
         })
       }
+    } finally {
+      setBtnAcceptDisabled(false)
+      setBtnAcceptTooltip('Acceptă')
+      setBtnRejectDisabled(false)
+      setBtnRejectTooltip('Refuză')
     }
     // setBtnAcceptDisabled(false)
   }
@@ -205,7 +211,10 @@ function PendingRequestRow({ request, getPendingRequests }) {
       request.accepted = false
       request.rejectedReason = rejectedReason
       request.handledBy = user ? `${user.lastName} ${user.firstName}` : 'Admin'
-      await axiosPrivate.put(`/certificate-request/${request.id}`, request)
+      await axiosPrivate.put(
+        `/reject-certificate-request/${request.id}`,
+        request
+      )
       setRejectDialogVisible(false)
       getPendingRequests()
       toast.info('Cererea a fost respinsă')
@@ -307,6 +316,7 @@ function PendingRequestRow({ request, getPendingRequests }) {
             data-tooltip-id={`tooltip-btn-reject-${request.id}`}
             data-tooltip-content={btnRejectTooltip}
             data-tooltip-place='left'
+            disabled={btnRejectDisabled}
             className='pending-request-row-button pending-request-row-reject'
             onClick={() => {
               setRejectDialogVisible(true)

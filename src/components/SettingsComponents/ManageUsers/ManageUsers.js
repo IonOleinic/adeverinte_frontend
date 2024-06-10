@@ -7,11 +7,13 @@ import LoadingLayer from '../../LoadingLayer/LoadingLayer'
 import { Paginator } from 'primereact/paginator'
 import UserRow from '../UserRow/UserRow'
 import { LiaPlusSolid } from 'react-icons/lia'
-import './ManageUsers.css'
 import { useNavigate } from 'react-router-dom'
+import EmptyList from '../../EmptyList/EmptyList'
+import './ManageUsers.css'
+
 function ManageUsers() {
   const navigate = useNavigate()
-  const { setIsLoading } = useLoading() // Use useLoading hook
+  const { isLoading, setIsLoading } = useLoading() // Use useLoading hook
   const { roles } = useRoles()
   const axiosPrivate = useAxiosPrivate()
   const [users, setUsers] = useState([])
@@ -23,7 +25,6 @@ function ManageUsers() {
   const [rows, setRows] = useState(10)
 
   const getUsers = async () => {
-    toast.dismiss()
     try {
       setIsLoading(true)
       const response = await axiosPrivate.get('/users')
@@ -126,36 +127,57 @@ function ManageUsers() {
         </div>
       </div>
       <div className='manage-users-list'>
-        <div className='manage-users-table-container'>
-          <table className='manage-users-table'>
-            <thead>
-              <tr className='user-row user-row-header'>
-                <th className='user-row-item user-row-avatar'>Avatar</th>
-                <th className='user-row-item user-row-fullname'>
-                  Nume Complet
-                </th>
-                <th className='user-row-item user-row-email'>Email</th>
-                <th className='user-row-item user-row-title'>Titlu</th>
-                <th className='user-row-item user-row-role'>Rol</th>
-                <th className='user-row-item user-row-buttons'>Acțiuni</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedUsers.map((user) => (
-                <UserRow key={user.id} user={user} deleteUser={deleteUser} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='manage-users-paginator'>
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={filteredUsers.length}
-            rowsPerPageOptions={[10, 20, 50]}
-            onPageChange={onPageChange}
+        {displayedUsers.length === 0 ? (
+          <EmptyList
+            message={'Nu sa găsit nici un utilizator :('}
+            visibility={!isLoading}
           />
-        </div>
+        ) : (
+          <>
+            <div className='manage-users-table-container'>
+              <table className='manage-users-table'>
+                <thead>
+                  <tr className='user-row user-row-header'>
+                    <th className='user-row-item user-row-avatar'>Avatar</th>
+                    <th className='user-row-item user-row-fullname'>
+                      Nume Complet
+                    </th>
+                    <th className='user-row-item user-row-email'>Email</th>
+                    <th className='user-row-item user-row-title'>Titlu</th>
+                    <th className='user-row-item user-row-role'>Rol</th>
+                    <th className='user-row-item user-row-buttons'>Acțiuni</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedUsers.map((user) => (
+                    <UserRow
+                      key={user.id}
+                      user={user}
+                      deleteUser={deleteUser}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className='manage-users-paginator'>
+              <Paginator
+                first={first}
+                rows={rows}
+                totalRecords={filteredUsers.length}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={onPageChange}
+              />
+            </div>
+            <div className='manage-users-statistics'>
+              <p>{`Rezultate: ${filteredUsers.length} / ${users.length}`}</p>
+            </div>
+            <div className='manage-users-page-nr'>
+              <p>{`Pagina ${Math.ceil(first / rows + 1)} / ${Math.ceil(
+                filteredUsers.length / rows
+              )}`}</p>
+            </div>
+          </>
+        )}
         <LoadingLayer />
       </div>
     </div>

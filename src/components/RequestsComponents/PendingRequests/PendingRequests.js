@@ -8,10 +8,11 @@ import { toast } from 'react-toastify'
 import useLoading from '../../../hooks/useLoading'
 import './PendingRequests.css'
 import LoadingLayer from '../../LoadingLayer/LoadingLayer'
+import EmptyList from '../../EmptyList/EmptyList'
 
 function PendingRequests() {
   const axiosPrivate = useAxiosPrivate()
-  const { setIsLoading } = useLoading() // Use useLoading hook
+  const { isLoading, setIsLoading } = useLoading() // Use useLoading hook
   const [pendingRequests, setPendingRequests] = useState([])
   const [filters, setFilters] = useState({
     studentEmail: '',
@@ -137,50 +138,73 @@ function PendingRequests() {
         </div>
       </div>
       <div className='pending-requests-list'>
-        <div className='pending-requests-table-container'>
-          <table className='pending-requests-table'>
-            <thead>
-              <tr className='pending-request-row pending-request-row-header'>
-                <th className='pending-request-row-item pending-request-row-date'>
-                  Data creării
-                </th>
-                <th className='pending-request-row-item pending-request-row-email'>
-                  Email student
-                </th>
-                <th className='pending-request-row-item pending-request-fullname'>
-                  Nume Complet
-                </th>
-                <th className='pending-request-row-item pending-request-study-domain'>
-                  Domeniul de studiu
-                </th>
-                <th className='pending-request-row-item pending-request-row-purpose'>
-                  Scopul adeverinței
-                </th>
-                <th className='pending-request-row-item pending-request-row-buttons'>
-                  Actiuni
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedRequests.map((request) => (
-                <PendingRequestRow
-                  key={request.id}
-                  request={request}
-                  getPendingRequests={getPendingRequests}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='pending-requests-paginator'>
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={filteredRequests.length}
-            rowsPerPageOptions={[10, 20, 50]}
-            onPageChange={onPageChange}
+        {pendingRequests.length === 0 ? (
+          <EmptyList
+            message={'Toate cererile au fost procesate'}
+            visibility={!isLoading}
+            positive={true}
           />
-        </div>
+        ) : displayedRequests.length === 0 ? (
+          <EmptyList
+            message={'Nu sa găsit nici o cerere conform filtrării'}
+            visibility={!isLoading}
+          />
+        ) : (
+          <>
+            <div className='pending-requests-table-container'>
+              <table className='pending-requests-table'>
+                <thead>
+                  <tr className='pending-request-row pending-request-row-header'>
+                    <th className='pending-request-row-item pending-request-row-date'>
+                      Data creării
+                    </th>
+                    <th className='pending-request-row-item pending-request-row-email'>
+                      Email student
+                    </th>
+                    <th className='pending-request-row-item pending-request-fullname'>
+                      Nume Complet
+                    </th>
+                    <th className='pending-request-row-item pending-request-study-domain'>
+                      Domeniul de studiu
+                    </th>
+                    <th className='pending-request-row-item pending-request-row-purpose'>
+                      Scopul adeverinței
+                    </th>
+                    <th className='pending-request-row-item pending-request-row-buttons'>
+                      Actiuni
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedRequests.map((request) => (
+                    <PendingRequestRow
+                      key={request.id}
+                      request={request}
+                      getPendingRequests={getPendingRequests}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className='pending-requests-paginator'>
+              <Paginator
+                first={first}
+                rows={rows}
+                totalRecords={filteredRequests.length}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={onPageChange}
+              />
+            </div>
+            <div className='pending-requests-statistics'>
+              <p>{`Rezultate: ${filteredRequests.length} / ${pendingRequests.length}`}</p>
+            </div>
+            <div className='pending-requests-page-nr'>
+              <p>{`Pagina ${Math.ceil(first / rows + 1)} / ${Math.ceil(
+                filteredRequests.length / rows
+              )}`}</p>
+            </div>
+          </>
+        )}
         <LoadingLayer />
       </div>
     </div>

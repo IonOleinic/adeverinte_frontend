@@ -65,6 +65,30 @@
   align-items: center;
   width: 100%;
 }
+.manage-users-statistics {
+  position: absolute;
+  bottom: 1rem;
+  left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+.manage-users-statistics p {
+  font-size: 1rem;
+  color: var(--normal-grey);
+}
+.manage-users-page-nr {
+  position: absolute;
+  bottom: 1rem;
+  right: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 200px;
+}
+.manage-users-page-nr p {
+  font-size: 1rem;
+  color: var(--normal-grey);
+}
 .manage-users-table {
   width: 100%;
   height: 100%;

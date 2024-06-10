@@ -16,8 +16,9 @@ function AddStudent() {
   const [educationForm, setEducationForm] = useState('')
   const [financing, setFinancing] = useState('')
   const [sex, setSex] = useState('')
-  const [emailFieldErrorMessage, setEmailFieldErrorMessage] = useState('')
-  const [emailFieldErrorBool, setEmailFieldErrorBool] = useState(false)
+  const [invalidStudentEmailMessage, setInvalidStudentEmailMessage] =
+    useState('')
+  const [invalidStudentEmailBool, setInvalidEmailBool] = useState(false)
   const [disabledAddBtn, setDisabledAddBtn] = useState(true)
 
   const addStudent = async (e) => {
@@ -58,8 +59,8 @@ function AddStudent() {
         console.log(error)
         if (error.response?.status === 409) {
           form.classList.remove('was-validated')
-          setEmailFieldErrorMessage('Exista deja un student cu acest email')
-          setEmailFieldErrorBool(true)
+          setInvalidStudentEmailMessage('Exista deja un student cu acest email')
+          setInvalidEmailBool(true)
         } else {
           toast.error('Eroare server.', {
             autoClose: false,
@@ -69,13 +70,13 @@ function AddStudent() {
       }
     }
   }
-  const verifyStudentData = (form) => {
+  const verifyStudentData = () => {
     let valid = true
     if (email.split('@')[1] !== 'student.usv.ro') {
-      setEmailFieldErrorMessage(
+      setInvalidStudentEmailMessage(
         'Email-ul trebuie sa fie de forma ' + ' @student.usv.ro'
       )
-      setEmailFieldErrorBool(true)
+      setInvalidEmailBool(true)
       valid = false
     }
     return valid
@@ -102,13 +103,13 @@ function AddStudent() {
   }, [])
 
   useEffect(() => {
-    if (emailFieldErrorBool) {
+    if (invalidStudentEmailBool) {
       toast.error('Eroare. Verificati datele introduse.', {
         theme: 'colored',
         autoClose: false,
       })
     }
-  }, [emailFieldErrorBool])
+  }, [invalidStudentEmailBool])
 
   return (
     <div className='student-form-container'>
@@ -125,7 +126,7 @@ function AddStudent() {
                 <input
                   type='email'
                   className={
-                    emailFieldErrorBool
+                    invalidStudentEmailBool
                       ? 'form-control is-invalid'
                       : 'form-control'
                   }
@@ -135,19 +136,19 @@ function AddStudent() {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
-                    setEmailFieldErrorBool(false)
+                    setInvalidEmailBool(false)
                     setDisabledAddBtn(false)
                   }}
                 />
                 <label htmlFor='floatingStudentEmail'>Email</label>
                 <div
                   className={
-                    emailFieldErrorBool
+                    invalidStudentEmailBool
                       ? 'invalid-feedback student-form-invalid-feedback'
                       : 'invalid-feedback student-form-valid-feedback'
                   }
                 >
-                  {emailFieldErrorMessage}
+                  {invalidStudentEmailMessage}
                 </div>
               </div>
 
@@ -167,7 +168,7 @@ function AddStudent() {
                 <label htmlFor='floatingStudentName'>Nume complet</label>
                 <div
                   className={
-                    emailFieldErrorBool
+                    invalidStudentEmailBool
                       ? 'invalid-feedback student-form-invalid-feedback'
                       : 'invalid-feedback student-form-valid-feedback'
                   }

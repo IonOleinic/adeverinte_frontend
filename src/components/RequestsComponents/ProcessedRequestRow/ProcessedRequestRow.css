@@ -31,6 +31,12 @@
 .processed-request-row-accepted {
   width: 100px;
 }
+.processed-request-row-printed-red {
+  color: var(--light-red);
+}
+.processed-request-row-printed-green {
+  color: var(--light-green);
+}
 .processed-request-row-rejected-reason {
   width: 180px;
 }
@@ -51,4 +57,7 @@
 }
 .processed-request-row-delete:hover {
   color: var(--hover-red);
+}
+.processed-request-row-delete:disabled {
+  color: var(--light-grey);
 }

@@ -11,9 +11,11 @@ import { IoIosOptions } from 'react-icons/io'
 import { IoIosLogOut } from 'react-icons/io'
 import { confirmDialog } from 'primereact/confirmdialog'
 import useLogout from '../../../hooks/useLogout'
+import { useNavigate } from 'react-router-dom'
 
 function UserProfile() {
   const logout = useLogout()
+  const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth } = useAuth()
   const [user, setUser] = useState({})
@@ -89,7 +91,10 @@ function UserProfile() {
           </li>
           <li
             className='user-profile-menu-list-item'
-            onClick={(e) => setUserMenuVisible(false)}
+            onClick={(e) => {
+              setUserMenuVisible(false)
+              navigate('/settings')
+            }}
           >
             <IoSettingsOutline size={20} />
             <p>Setări</p>

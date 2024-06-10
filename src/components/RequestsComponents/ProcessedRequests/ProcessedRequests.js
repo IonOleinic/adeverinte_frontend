@@ -9,10 +9,11 @@ import useLoading from '../../../hooks/useLoading'
 import { AiOutlineUndo } from 'react-icons/ai'
 import { Tooltip } from 'react-tooltip'
 import { toast } from 'react-toastify'
+import EmptyList from '../../EmptyList/EmptyList'
 
 function ProcessedRequests() {
   const axiosPrivate = useAxiosPrivate()
-  const { setIsLoading } = useLoading() // Use useLoading hook
+  const { isLoading, setIsLoading } = useLoading() // Use useLoading hook
   const [processedRequests, setProcessedRequests] = useState([])
   const [filters, setFilters] = useState({
     studentEmail: '',
@@ -180,53 +181,70 @@ function ProcessedRequests() {
         </div>
       </div>
       <div className='processed-requests-list'>
-        <div className='processed-requests-table-container'>
-          <table className='processed-requests-table'>
-            <thead>
-              <tr className='processed-request-row processed-request-row-header'>
-                <th className='processed-request-row-item processed-request-row-date'>
-                  Data creării
-                </th>
-                <th className='processed-request-row-item processed-request-row-email'>
-                  Email student
-                </th>
-                <th className='processed-request-row-item processed-request-row-purpose'>
-                  Scopul adeverinței
-                </th>
-                <th className='processed-request-row-item processed-request-row-handled-by'>
-                  Procesată de
-                </th>
-                <th className='processed-request-row-item processed-request-row-accepted'>
-                  Acceptată
-                </th>
-                <th className='processed-request-row-item processed-request-row-rejected-reason'>
-                  Motiv respingere
-                </th>
-                <th className='processed-request-row-item processed-request-row-buttons'>
-                  Actiuni
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedRequests.map((request) => (
-                <ProcessedRequestRow
-                  key={request.id}
-                  request={request}
-                  deleteRequest={deleteRequest}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className='processed-requests-paginator'>
-          <Paginator
-            first={first}
-            rows={rows}
-            totalRecords={filteredRequests.length}
-            rowsPerPageOptions={[10, 20, 50]}
-            onPageChange={onPageChange}
+        {displayedRequests.length === 0 ? (
+          <EmptyList
+            message='Nu sa găsit nici o cerere :('
+            visibility={!isLoading}
           />
-        </div>
+        ) : (
+          <>
+            <div className='processed-requests-table-container'>
+              <table className='processed-requests-table'>
+                <thead>
+                  <tr className='processed-request-row processed-request-row-header'>
+                    <th className='processed-request-row-item processed-request-row-date'>
+                      Data creării
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-email'>
+                      Email student
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-purpose'>
+                      Scopul adeverinței
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-handled-by'>
+                      Procesată de
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-accepted'>
+                      Acceptată
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-rejected-reason'>
+                      Motiv respingere
+                    </th>
+                    <th className='processed-request-row-item processed-request-row-buttons'>
+                      Actiuni
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedRequests.map((request) => (
+                    <ProcessedRequestRow
+                      key={request.id}
+                      request={request}
+                      deleteRequest={deleteRequest}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className='processed-requests-paginator'>
+              <Paginator
+                first={first}
+                rows={rows}
+                totalRecords={filteredRequests.length}
+                rowsPerPageOptions={[10, 20, 50]}
+                onPageChange={onPageChange}
+              />
+            </div>
+            <div className='processed-requests-statistics'>
+              <p>{`Rezultate: ${filteredRequests.length} / ${processedRequests.length}`}</p>
+            </div>
+            <div className='processed-requests-page-nr'>
+              <p>{`Pagina ${Math.ceil(first / rows + 1)} / ${Math.ceil(
+                filteredRequests.length / rows
+              )}`}</p>
+            </div>
+          </>
+        )}
         <LoadingLayer />
       </div>
     </div>

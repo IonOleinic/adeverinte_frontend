@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import QRCode from 'react-qr-code'
 
 const removeAccents = (str) =>
@@ -27,9 +27,10 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
           height: '60px',
         }}
       >
-        <p style={{ margin: 0 }}>UNIVERSITATEA STEFAN CEL MARE DIN SUCEAVA</p>
+        <p style={{ margin: 0 }}>UNIVERSITATEA "ȘTEFAN CEL MARE" DIN SUCEAVA</p>
         <p style={{ margin: 0 }}>
-          FACULTATEA DE INGINERIE ELECTRICA SI STIINTA CALCULATOARELOR
+          {faculty.fullName?.toUpperCase() ||
+            'FACULTATEA DE INGINERIE ELECTRICĂ ȘI ȘTIINȚA CALCULATOARELOR'}
         </p>
       </div>
       <div
@@ -41,7 +42,7 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
         }}
       >
         <p style={{ fontSize: '0.9rem', margin: '0' }}>
-          Nr. ............../FIESC/...................
+          Nr. ............../{faculty.shortName || 'FIESC'}/...................
         </p>
       </div>
       <div
@@ -76,9 +77,10 @@ function PrintCertificate({ certificate, faculty, secretarName }) {
       >
         <p style={{ fontSize: '0.9rem', margin: '0' }}>
           <span style={{ width: '40px', display: 'inline-block' }}></span>
-          Studentul(a) {certificate.fullName}, este înscris(ă) în anul
-          universitar {faculty.academicYear}, în anul {certificate.studyYear} de
-          studii, program de studii - {certificate.studyCycle} :{' '}
+          Student{certificate.sex == 'F' ? 'a' : 'ul'} {certificate.fullName},
+          este înscris{certificate.sex == 'F' ? 'ă' : ''} în anul universitar{' '}
+          {faculty.academicYear}, în anul {certificate.studyYear} de studii,
+          program de studii - {certificate.studyCycle} :{' '}
           {certificate.studyProgram.length > 1
             ? certificate.studyProgram
             : certificate.studyDomain}

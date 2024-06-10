@@ -51,6 +51,10 @@ function EditFaculty() {
         setChiefSecretarName(faculty.chiefSecretarName)
       }
     } catch (error) {
+      toast.error('Eroare setare facultate', {
+        theme: 'colored',
+        autoClose: false,
+      })
       console.log(error)
     }
   }
@@ -116,17 +120,28 @@ function EditFaculty() {
 
     if (form.checkValidity()) {
       try {
-        await axiosPrivate.put(`/faculty/${facultyId}`, {
-          fullName,
-          shortName,
-          academicYear,
-          deanName,
-          chiefSecretarName,
-        })
-        toast.success(`A fost editată facultatea ${shortName}`)
-        setTimeout(() => {
-          navigate('/settings')
-        }, 500)
+        if (!facultyId || facultyId !== -1) {
+          await axiosPrivate.put(`/faculty/${facultyId}`, {
+            fullName,
+            shortName,
+            academicYear,
+            deanName,
+            chiefSecretarName,
+          })
+          toast.success(`A fost editată facultatea ${shortName}`)
+        } else {
+          await axiosPrivate.post(`/faculty`, {
+            fullName,
+            shortName,
+            academicYear,
+            deanName,
+            chiefSecretarName,
+          })
+          toast.success(`A fost adăugată facultatea ${shortName}`)
+        }
+        // setTimeout(() => {
+        //   navigate('/settings')
+        // }, 1000)
       } catch (error) {
         console.log(error)
         form.classList.remove('was-validated')
@@ -357,7 +372,7 @@ function EditFaculty() {
                 type='submit'
                 onSubmit={editFaculty}
               >
-                Editează
+                Salvează
               </button>
             </div>
           </form>

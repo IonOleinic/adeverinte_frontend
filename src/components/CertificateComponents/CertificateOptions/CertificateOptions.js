@@ -42,6 +42,10 @@ function CertificateOptions() {
     const form = document.getElementById('certificate-options-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
+      toast.error('Eroare. Verificati datele introduse.', {
+        theme: 'colored',
+        autoClose: false,
+      })
     }
     form.classList.add('was-validated')
 

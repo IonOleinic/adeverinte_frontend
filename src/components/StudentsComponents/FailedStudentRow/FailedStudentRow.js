@@ -1,8 +1,11 @@
 import './FailedStudentRow.css'
 
-function FailedStudentRow({ student }) {
+function FailedStudentRow({ student, index }) {
   return (
     <tr className='failed-student-row'>
+      <td className='failed-student-row-item failed-student-row-index'>
+        <p>{index}</p>
+      </td>
       <td className='failed-student-row-item failed-student-row-excel-index'>
         <p>{student.excelIndex}</p>
       </td>

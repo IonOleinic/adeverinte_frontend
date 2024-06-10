@@ -19,6 +19,7 @@
   border-radius: 50%;
   width: 40px;
   color: white;
+  pointer-events: none;
 }
 
 .user-profile-info {

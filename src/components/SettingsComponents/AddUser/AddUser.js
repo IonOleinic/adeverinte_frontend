@@ -67,6 +67,13 @@ function AddUser() {
       setInvalidFirstNameMessage('Prenumele trebuie să aibă minim 2 caractere')
       return
     }
+    if (!checkPassword(password)) {
+      setInvalidPasswordBool(true)
+      setInvalidPasswordMessage(
+        'Parola trebuie să conțină cel puțin 8 caractere, o literă mare, o literă mică, un număr și un caracter special.'
+      )
+      return
+    }
     if (password != confirmPassword) {
       setInvalidConfirmPasswordBool(true)
       setInvalidConfirmPasswordMessage('Parola nu coincide!')
@@ -75,6 +82,10 @@ function AddUser() {
     const form = document.getElementById('add-user-form')
     if (!form.checkValidity()) {
       e.stopPropagation()
+      if (!verifyUserData()) {
+        form.classList.remove('was-validated')
+        return
+      }
       toast.error('Eroare. Verificati datele introduse.', {
         theme: 'colored',
         autoClose: false,
@@ -115,6 +126,24 @@ function AddUser() {
         }
       }
     }
+  }
+
+  const verifyUserData = () => {
+    let valid = true
+    if (
+      email.split('@')[1] !== 'student.usv.ro' &&
+      email.split('@')[1] !== 'usm.ro'
+    ) {
+      setInvalidUserEmailMessage('Email-ul trebuie sa aparțină domeniului USV')
+      setInvalidUserEmailBool(true)
+      valid = false
+    }
+    return valid
+  }
+
+  function checkPassword(str) {
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*.])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    return re.test(str)
   }
 
   useEffect(() => {
@@ -265,7 +294,7 @@ function AddUser() {
                 placeholder='Password'
                 required
                 autoComplete='new-password'
-                minLength={5}
+                minLength={8}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value)
@@ -296,7 +325,7 @@ function AddUser() {
                 id='floatingConfirmPassword'
                 placeholder='Password'
                 required
-                minLength={5}
+                minLength={8}
                 value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value)

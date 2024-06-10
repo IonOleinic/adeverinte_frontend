@@ -109,6 +109,13 @@
   color: white;
   cursor: pointer;
 }
+.pending-request-row-reject:disabled {
+  color: var(--light-grey);
+  border-color: var(--light-grey);
+  cursor: initial;
+  background-color: initial;
+}
+
 .reject-request-form {
   display: flex;
   align-items: center;

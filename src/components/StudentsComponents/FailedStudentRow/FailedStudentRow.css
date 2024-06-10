@@ -18,6 +18,10 @@
   width: 150px;
   flex-grow: 1;
 }
+.failed-student-row-index {
+  width: 50px;
+  flex-grow: 0;
+}
 .failed-student-row-excel-index {
   width: 80px;
 }
@@ -33,4 +37,5 @@
 }
 .failed-student-row-study-year {
   width: 50px;
+  flex-grow: 0;
 }

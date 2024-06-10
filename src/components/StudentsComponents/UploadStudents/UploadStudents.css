@@ -78,7 +78,7 @@
   gap: 1rem;
 }
 .failed-students-message {
-  width: 70%;
+  width: 50%;
   flex-grow: 1;
 }
 .failed-students-table-container h3 {
