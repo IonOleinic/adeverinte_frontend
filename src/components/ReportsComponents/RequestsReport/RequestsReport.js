@@ -1,24 +1,11 @@
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { Calendar } from 'primereact/calendar'
-import * as XLSX from 'xlsx'
 import { FloatLabel } from 'primereact/floatlabel'
-import useAuth from '../../../hooks/useAuth'
-import useRoles from '../../../hooks/useRoles'
 import { toast } from 'react-toastify'
 import './RequestsReport.css'
 
-const formatDate = (date) => {
-  const d = new Date(date)
-  const year = d.getFullYear()
-  const month = ('0' + (d.getMonth() + 1)).slice(-2)
-  const day = ('0' + d.getDate()).slice(-2)
-  return `${day}.${month}.${year}`
-}
-
 function RequestsReport() {
-  // const { auth } = useAuth()
-  // const { roles } = useRoles()
   const axiosPrivate = useAxiosPrivate()
   const [serverErrorBool, setServerErrorBool] = useState(false)
   const [serverErrorMessage, setServerErrorMessage] = useState('')
@@ -44,87 +31,20 @@ function RequestsReport() {
     certificatePurpose: 'Scopul adeverinței',
   }
 
-  const getRequests = async () => {
-    try {
-      const response = await axiosPrivate.get(
-        `/certificate-requests?start-date=${startDate}&end-date=${endDate}`
-      )
-      return response.data
-    } catch (error) {
-      console.error(error)
-      setServerErrorBool(true)
-      setServerErrorMessage('Eroare server.')
-    }
-  }
-
   const generateReport = async (e) => {
     e.preventDefault()
     setDisabledGenerateBtn(true)
     setServerErrorBool(false)
     toast.dismiss()
     try {
-      const requests = await getRequests()
-      const selectedFields = Object.keys(exportedFields).filter(
-        (key) => exportedFields[key]
+      const response = await axiosPrivate.get(
+        `/requests-report?start_date=${startDate}&end_date=${endDate}&fields=${JSON.stringify(
+          fields
+        )}&exportedFields=${JSON.stringify(exportedFields)}`,
+        {
+          responseType: 'blob', // Specifică tipul răspunsului ca blob pentru fișiere
+        }
       )
-
-      const dates = requests.map((request) => new Date(request.date))
-      const formatedStartDate = startDate
-        ? formatDate(startDate)
-        : formatDate(new Date(Math.min(...dates)))
-      const formatedEndDate = endDate
-        ? formatDate(endDate)
-        : formatDate(new Date(Math.max(...dates)))
-
-      const dataToExport = requests.map((request) => {
-        request.date = formatDate(request.date)
-        request.accepted = request.accepted ? 'Da' : 'Nu'
-        const filteredRequest = []
-        selectedFields.forEach((key) => {
-          const fieldKey = key.replace('Checked', '')
-          filteredRequest.push(request[fieldKey] || '-')
-        })
-        return filteredRequest
-      })
-
-      // Create custom header rows
-      const titleRow = ['Raport Cereri']
-      const periodRow = [`Perioada ${formatedStartDate} - ${formatedEndDate}`]
-      const headersRow = selectedFields.map(
-        (key) => fields[key.replace('Checked', '')]
-      )
-
-      // Add custom rows and data
-      const worksheetData = [titleRow, periodRow, headersRow, ...dataToExport]
-
-      // Calculate column widths based on the longest text in each column
-      const colWidths = selectedFields.map((key, colIndex) => {
-        const maxFieldLength = Math.max(
-          ...worksheetData
-            .slice(2)
-            .map((row) => row[colIndex].toString().length)
-        )
-        return { wch: maxFieldLength }
-      })
-
-      const ws = XLSX.utils.aoa_to_sheet(worksheetData)
-
-      // Set column widths
-      ws['!cols'] = colWidths
-
-      // Merge title cells
-      ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }]
-
-      // Merge period cells
-      ws['!merges'].push({ s: { r: 1, c: 0 }, e: { r: 1, c: 2 } })
-
-      // Center-align title and period
-      ws['A1'].s = { alignment: { horizontal: 'center' } } // Title
-      ws['A2'].s = { alignment: { horizontal: 'center' } } // Period
-
-      const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, 'Raport Cereri')
-
       const now = new Date()
       const formattedDate =
         now.getFullYear() +
@@ -134,19 +54,17 @@ function RequestsReport() {
         ('0' + now.getHours()).slice(-2) +
         ('0' + now.getMinutes()).slice(-2) +
         ('0' + now.getSeconds()).slice(-2)
+      // Creează un URL pentru fișierul descărcat
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `raport_cereri_${formattedDate}.xlsx`) // Setează numele fișierului
+      document.body.appendChild(link)
+      link.click()
 
-      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-      const blob = new Blob([wbout], { type: 'application/octet-stream' })
-
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      document.body.appendChild(a)
-      a.style = 'display: none'
-      a.href = url
-      a.download = `raport_cereri_${formattedDate}.xlsx`
-      a.click()
-      URL.revokeObjectURL(url)
-      toast.success('Raport generat cu succes.', {
+      // Curăță URL-ul după descărcare
+      window.URL.revokeObjectURL(url)
+      toast.success('Raport cereri generat cu succes.', {
         autoClose: false,
         theme: 'colored',
       })
@@ -162,38 +80,6 @@ function RequestsReport() {
       setDisabledGenerateBtn(false)
     }
   }
-
-  // useEffect(() => {
-  //   if (auth.roles?.includes(roles.Admin)) {
-  //     setExportedFieldsAccess(true)
-  //     setExportedFields({
-  //       registrationNr: true,
-  //       date: true,
-  //       fullName: true,
-  //       studyDomain: true,
-  //       studyProgram: true,
-  //       educationForm: true,
-  //       studyCycle: true,
-  //       studyYear: true,
-  //       financing: true,
-  //       certificatePurpose: true,
-  //     })
-  //   } else {
-  //     setExportedFieldsAccess(false)
-  //     setExportedFields({
-  //       registrationNr: true,
-  //       date: true,
-  //       fullName: true,
-  //       studyDomain: false,
-  //       studyProgram: false,
-  //       educationForm: false,
-  //       studyCycle: false,
-  //       studyYear: false,
-  //       financing: false,
-  //       certificatePurpose: true,
-  //     })
-  //   }
-  // }, [roles, auth])
 
   useEffect(() => {
     toast.dismiss()

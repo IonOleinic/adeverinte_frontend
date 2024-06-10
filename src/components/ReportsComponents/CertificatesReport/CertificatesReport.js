@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { Calendar } from 'primereact/calendar'
-import * as XLSX from 'xlsx'
 import { toast } from 'react-toastify'
 import { FloatLabel } from 'primereact/floatlabel'
 import useAuth from '../../../hooks/useAuth'
 import useRoles from '../../../hooks/useRoles'
 import './CertificatesReport.css'
-
-const formatDate = (date) => {
-  const d = new Date(date)
-  const year = d.getFullYear()
-  const month = ('0' + (d.getMonth() + 1)).slice(-2)
-  const day = ('0' + d.getDate()).slice(-2)
-  return `${day}.${month}.${year}`
-}
 
 function CertificatesReport() {
   const { auth } = useAuth()
@@ -52,93 +43,20 @@ function CertificatesReport() {
     certificatePurpose: 'Scopul',
   }
 
-  const getCertificates = async () => {
-    try {
-      const response = await axiosPrivate.get(
-        `/certificates?start-date=${startDate}&end-date=${endDate}`
-      )
-      return response.data
-    } catch (error) {
-      console.error(error)
-      setServerErrorBool(true)
-      setServerErrorMessage('Eroare server.')
-    }
-  }
-
   const generateReport = async (e) => {
     e.preventDefault()
     setDisabledGenerateBtn(true)
     setServerErrorBool(false)
     toast.dismiss()
     try {
-      const certificates = await getCertificates()
-      console.log(certificates)
-      const selectedFields = Object.keys(exportedFields).filter(
-        (key) => exportedFields[key]
+      const response = await axiosPrivate.get(
+        `/certificates-report?start_date=${startDate}&end_date=${endDate}&fields=${JSON.stringify(
+          fields
+        )}&exportedFields=${JSON.stringify(exportedFields)}`,
+        {
+          responseType: 'blob', // Specifică tipul răspunsului ca blob pentru fișiere
+        }
       )
-
-      const dates = certificates.map(
-        (certificate) => new Date(certificate.createdAt)
-      )
-      let formattedStartDate = '?'
-      let formattedEndDate = '?'
-      if (dates.length !== 0) {
-        formattedStartDate = startDate
-          ? formatDate(startDate)
-          : formatDate(new Date(Math.min(...dates)))
-        formattedEndDate = endDate
-          ? formatDate(endDate)
-          : formatDate(new Date(Math.max(...dates)))
-      }
-
-      const dataToExport = certificates.map((certificate) => {
-        certificate.createdAt = formatDate(certificate.createdAt)
-        const filteredCertificate = []
-        selectedFields.forEach((key) => {
-          const fieldKey = key.replace('Checked', '')
-          filteredCertificate.push(certificate[fieldKey] || '-')
-        })
-        return filteredCertificate
-      })
-
-      // Create custom header rows
-      const titleRow = ['Raport Adeverințe']
-      const periodRow = [`Perioada ${formattedStartDate} - ${formattedEndDate}`]
-      const headersRow = selectedFields.map(
-        (key) => fields[key.replace('Checked', '')]
-      )
-
-      // Add custom rows and data
-      const worksheetData = [titleRow, periodRow, headersRow, ...dataToExport]
-
-      // Calculate column widths based on the longest text in each column
-      const colWidths = selectedFields.map((key, colIndex) => {
-        const maxFieldLength = Math.max(
-          ...worksheetData
-            .slice(2)
-            .map((row) => row[colIndex].toString().length)
-        )
-        return { wch: maxFieldLength }
-      })
-
-      const ws = XLSX.utils.aoa_to_sheet(worksheetData)
-
-      // Set column widths
-      ws['!cols'] = colWidths
-
-      // Merge title cells
-      ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }]
-
-      // Merge period cells
-      ws['!merges'].push({ s: { r: 1, c: 0 }, e: { r: 1, c: 2 } })
-
-      // Center-align title and period
-      ws['A1'].s = { alignment: { horizontal: 'center' } } // Title
-      ws['A2'].s = { alignment: { horizontal: 'center' } } // Period
-
-      const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, 'Raport Adeverințe')
-
       const now = new Date()
       const formattedDate =
         now.getFullYear() +
@@ -148,19 +66,17 @@ function CertificatesReport() {
         ('0' + now.getHours()).slice(-2) +
         ('0' + now.getMinutes()).slice(-2) +
         ('0' + now.getSeconds()).slice(-2)
+      // Creează un URL pentru fișierul descărcat
+      const url = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `raport_adeverinte_${formattedDate}.xlsx`) // Setează numele fișierului
+      document.body.appendChild(link)
+      link.click()
 
-      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
-      const blob = new Blob([wbout], { type: 'application/octet-stream' })
-
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      document.body.appendChild(a)
-      a.style = 'display: none'
-      a.href = url
-      a.download = `raport_adeverinte_${formattedDate}.xlsx`
-      a.click()
-      URL.revokeObjectURL(url)
-      toast.success('Raport generat cu succes.', {
+      // Curăță URL-ul după descărcare
+      window.URL.revokeObjectURL(url)
+      toast.success('Raport adeverinte generat cu succes.', {
         autoClose: false,
         theme: 'colored',
       })
