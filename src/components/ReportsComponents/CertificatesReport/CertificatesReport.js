@@ -30,19 +30,6 @@ function CertificatesReport() {
     certificatePurpose: true,
   })
 
-  const fields = {
-    registrationNr: 'Nr înregistrare',
-    createdAt: 'Data',
-    fullName: 'Nume complet',
-    studyDomain: 'Domeniu de studii',
-    studyProgram: 'Program de studii',
-    educationForm: 'Forma de învățământ',
-    studyCycle: 'Ciclu de studii',
-    studyYear: 'An',
-    financing: 'Finanțare',
-    certificatePurpose: 'Scopul',
-  }
-
   const generateReport = async (e) => {
     e.preventDefault()
     setDisabledGenerateBtn(true)
@@ -50,9 +37,9 @@ function CertificatesReport() {
     toast.dismiss()
     try {
       const response = await axiosPrivate.get(
-        `/certificates-report?start_date=${startDate}&end_date=${endDate}&fields=${JSON.stringify(
-          fields
-        )}&exportedFields=${JSON.stringify(exportedFields)}`,
+        `/certificates-report?start_date=${startDate}&end_date=${endDate}&exported_fields=${JSON.stringify(
+          exportedFields
+        )}`,
         {
           responseType: 'blob', // Specifică tipul răspunsului ca blob pentru fișiere
         }

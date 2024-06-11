@@ -12,7 +12,6 @@ function RequestsReport() {
   const [disabledGenerateBtn, setDisabledGenerateBtn] = useState(false)
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [exportedFieldsAccess, setExportedFieldsAccess] = useState(true)
   const [exportedFields, setExportedFields] = useState({
     studentEmail: true,
     date: true,
@@ -22,15 +21,6 @@ function RequestsReport() {
     rejectedReason: true,
   })
 
-  const fields = {
-    studentEmail: 'Email student',
-    date: 'Data',
-    accepted: 'Acceptată',
-    handledBy: 'Procesată de',
-    rejectedReason: 'Motiv respingere',
-    certificatePurpose: 'Scopul adeverinței',
-  }
-
   const generateReport = async (e) => {
     e.preventDefault()
     setDisabledGenerateBtn(true)
@@ -38,9 +28,9 @@ function RequestsReport() {
     toast.dismiss()
     try {
       const response = await axiosPrivate.get(
-        `/requests-report?start_date=${startDate}&end_date=${endDate}&fields=${JSON.stringify(
-          fields
-        )}&exportedFields=${JSON.stringify(exportedFields)}`,
+        `/requests-report?start_date=${startDate}&end_date=${endDate}&exported_fields=${JSON.stringify(
+          exportedFields
+        )}`,
         {
           responseType: 'blob', // Specifică tipul răspunsului ca blob pentru fișiere
         }
@@ -109,7 +99,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='emailChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.studentEmail}
                     onChange={(e) => {
                       setExportedFields({
@@ -128,7 +117,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='dateChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.date}
                     onChange={(e) => {
                       setExportedFields({
@@ -147,7 +135,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='acceptedChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.accepted}
                     onChange={(e) => {
                       setExportedFields({
@@ -166,7 +153,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='handledByChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.handledBy}
                     onChange={(e) => {
                       setExportedFields({
@@ -188,7 +174,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='rejectedChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.rejectedReason}
                     onChange={(e) => {
                       setExportedFields({
@@ -207,7 +192,6 @@ function RequestsReport() {
                     type='checkbox'
                     value=''
                     id='purposeChecked'
-                    disabled={!exportedFieldsAccess}
                     checked={exportedFields.certificatePurpose}
                     onChange={(e) => {
                       setExportedFields({
